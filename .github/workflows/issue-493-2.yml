@@ -1,4 +1,5 @@
 name: "setup-dotnet"
+on: [push, pull_request]
 
 description: "A wrapper around the official actions/setup-dotnet action with extra features"
 
