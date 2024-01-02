@@ -1,7 +1,8 @@
-{  
-  "sdk": {
-    "version": "8.0.0", /* https://learn.microsoft.com/en-us/dotnet/core/tools/global-json */
-    "rollForward": "latestFeature",
-    "allowPrerelease": false
+{
+  // https://learn.microsoft.com/en-us/dotnet/core/tools/global-json
+  sdk: {
+    version: "8.0.0",
+    rollForward: "latestFeature",
+    allowPrerelease: false,
   }
 }
