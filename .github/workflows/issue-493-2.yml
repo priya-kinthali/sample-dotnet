@@ -17,10 +17,11 @@ inputs:
     default: true
     required: false
 
-runs:
-  using: "composite"
 
-  steps:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
 
     - shell: bash
       run: |
