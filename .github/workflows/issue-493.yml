@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-dotnet@v3
+    - uses: priya-kinthali/setup-dotnet@test-493
       with:
-        global-json-file: 'global.json5'
+        global-json-file: 'global.json'
     - run: dotnet build
