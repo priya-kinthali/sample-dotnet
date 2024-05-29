@@ -23,10 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Api\Api.csproj" />
-    <ProjectReference Include="..\..\src\Library\Library.csproj" />
     <ProjectReference Include="..\..\src\SecondProj\SecondProj.csproj" />
-
   </ItemGroup>
 
 </Project>
