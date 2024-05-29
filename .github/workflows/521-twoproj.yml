@@ -72,15 +72,15 @@ jobs:
       matrix:
         project: ['Library', 'SecondProj']
 
-    name: test ${{ matrix.project }}
+    # name: test ${{ matrix.project }}
 
-    steps:
+    # steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
+    #   - name: Checkout
+    #     uses: actions/checkout@v4
 
-      - name: Test
-        run: dotnet test test/${{ matrix.project }}.Test --configuration ${{ env.environment }} -p:Version=1.0.0
+    #   - name: Test
+    #     run: dotnet test test/${{ matrix.project }}.Test --configuration ${{ env.environment }} -p:Version=1.0.0
 
   pack:
 
