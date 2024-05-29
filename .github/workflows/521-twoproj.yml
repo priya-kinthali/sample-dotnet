@@ -61,7 +61,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build
-        run:  dotnet build src/${{ matrix.project }} --configuration ${{ env.environment }} -p:Version=${{ needs.setup.outputs.version }}
+        run:  dotnet build src/${{ matrix.project }} --configuration ${{ env.environment }} -p:Version=1.0.0
+      
   test:
 
     runs-on: ubuntu-latest
@@ -79,7 +80,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Test
-        run: dotnet test test/${{ matrix.project }}.Test --configuration ${{ env.environment }} -p:Version=${{ needs.setup.outputs.version }}
+        run: dotnet test test/${{ matrix.project }}.Test --configuration ${{ env.environment }} -p:Version=1.0.0
 
   pack:
 
@@ -99,7 +100,7 @@ jobs:
 
       - name: Pack
         run: 
-          dotnet pack src/${{ matrix.project }} --configuration ${{ env.environment }} --output ${{ github.workspace }} -p:PackageVersion=${{ needs.setup.outputs.version }}
+          dotnet pack src/${{ matrix.project }} --configuration ${{ env.environment }} --output ${{ github.workspace }} -p:PackageVersion=1.0.0
 
       - name: Upload
         uses: actions/upload-artifact@v4
@@ -129,7 +130,7 @@ jobs:
           path: ${{ github.workspace }}
 
       - name: Publish
-        run: dotnet nuget push ${{ github.workspace }}/${{ matrix.project }}.${{ needs.setup.outputs.version }}.nupkg --source ${{ env.packages_source }} --api-key ${{ env.packages_personal_access_token }} --skip-duplicate --no-symbols
+        run: dotnet nuget push ${{ github.workspace }}/${{ matrix.project }}.1.0.0.nupkg --source ${{ env.packages_source }} --api-key ${{ env.packages_personal_access_token }} --skip-duplicate --no-symbols
 
 
 
