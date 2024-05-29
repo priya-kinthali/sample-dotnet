@@ -43,8 +43,7 @@ jobs:
       uses: gittools/actions/gitversion/execute@v1
       id: versioning
       with:
-          useConfigFile: true
-          configFilePath: gitversion.yml
+          useConfigFile: false
 
   build:
 
