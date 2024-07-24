@@ -1,47 +1,37 @@
 name: DotNet
-
 on:
-  pull_request:
-    branches: [main]
-  push:
-    branches: [main]
 
-env:
-  DOTNET_NOLOGO: true
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  POWERSHELL_TELEMETRY_OPTOUT: 1
-  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  push:
+    branches: [537-installed-version]
+  # workflow_dispatch:
+  #   inputs:
+  #     buildArgs:
+  #       description: 'Arguments for the build'
+  #       required: false
+  #       default: ''
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    name: Test
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-2019, windows-2022]
-        cache: [true, false]
-      fail-fast: false
+    runs-on: windows-2022
+   
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+      - name: Setup .NET 8.0.300
+        uses: actions/setup-dotnet@v4
         with:
-          fetch-depth: 0
+          dotnet-version: 8.0.300
 
-      - name: Cache NuGet packages
-        if: matrix.cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: ${{ runner.os }}-nuget-
-
-      - name: Setup DotNet 6
-        uses: jetersen/setup-dotnet@fix/usePwsh
-        with:
-          dotnet-version: 6.0.x
-
-      - name: DotNet restore
+      - name: Run Uno Check
+        shell: pwsh
         run: |
-          dotnet new nugetconfig
-          dotnet restore -v n
+          dotnet tool install --global Uno.Check --version 1.25.1
+          uno-check -v --ci --non-interactive --fix --verbose --skip xcode --skip gtk3 --skip vswin --skip androidemulator --skip androidsdk --skip vsmac --skip dotnetnewunotemplates
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build Packages
+        shell: pwsh
+        run: |
+          msbuild ./MySolution.sln /r /p:Configuration=Release ${{ inputs.build-args }}
