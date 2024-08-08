@@ -20,7 +20,7 @@ jobs:
       - name: Setup .NET 8.0.300
         uses: actions/setup-dotnet@v4.0.1
         with:
-          dotnet-version: 8.0.300
+          dotnet-version: '8.0.300'
 
       - name: Run Uno Check
         shell: pwsh
