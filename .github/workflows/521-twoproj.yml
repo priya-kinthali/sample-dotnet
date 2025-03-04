@@ -8,8 +8,10 @@ env:
   environment: production
 
 on:
-  push:
-    branches: [ 521-secrets.GITHUB_TOKEN ]
+  # push:
+  #   branches: [ 521-secrets.GITHUB_TOKEN ]
+  workflow_dispatch:
+    
 
 permissions: write-all
 

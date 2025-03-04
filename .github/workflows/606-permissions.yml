@@ -1,0 +1,23 @@
+name: .NET Core Build and Push
+on:
+  push:
+    branches: [ 521-secrets.GITHUB_TOKEN ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ['Library']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '3.1.x'
+          source-url: https://nuget.pkg.github.com/priya-kinthali/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - run: dotnet build src/${{ matrix.project }}
+      - name: Create the package
+        run: dotnet pack --configuration Release src/${{ matrix.project }}
+      - name: Publish the package to GPR
+        run: dotnet nuget push src/${{ matrix.project }}/bin/Release/*.nupkg
