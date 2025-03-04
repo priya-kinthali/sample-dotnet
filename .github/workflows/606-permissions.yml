@@ -2,8 +2,8 @@ name: .NET Core Build and Push
 on:
   push:
     branches: [ 521-secrets.GITHUB_TOKEN ]
-permissions:
-  packages: write
+# permissions:
+#   packages: write
 jobs:
   build:
     runs-on: ubuntu-latest
