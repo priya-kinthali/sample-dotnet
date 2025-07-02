@@ -24,3 +24,9 @@ jobs:
 
       - name: Verify installation
         run: dotnet --version
+
+      - name: List installed SDKs
+        run: dotnet --list-sdks
+
+      - name: List installed runtimes
+        run: dotnet --list-runtimes
