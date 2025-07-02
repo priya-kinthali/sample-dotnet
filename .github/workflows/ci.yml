@@ -1,20 +1,25 @@
-name: Reproduce Setup-Dotnet Failure-588issue
+name: Reproduce Setup-Dotnet 356
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   setup-dotnet:
-    # runs-on: windows-latest
-    runs-on: self-hosted
+    strategy:
+      matrix:
+        # os: [windows-latest, macos-13, ubuntu-latest]
+        os: [ubuntu-latest]
+
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4.1.0
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: '8.0.x'
 
       - name: Verify installation
         run: dotnet --version
