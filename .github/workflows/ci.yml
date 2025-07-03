@@ -20,7 +20,7 @@ jobs:
         uses: akv-platform/setup-dotnet@prefer-installed
         with:
           dotnet-version: '9.0.x'
-          runtime-only: true
+          prefer-installed: true
 
       - name: Verify installation
         run: dotnet --version
