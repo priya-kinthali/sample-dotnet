@@ -7,7 +7,6 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-13, ubuntu-22.04, ubuntu-latest]
-        # os: [ubuntu-latest]
 
       fail-fast: false
     runs-on: ${{ matrix.os }}
@@ -21,6 +20,7 @@ jobs:
         uses: akv-platform/setup-dotnet@install-runtime-only
         with:
           dotnet-version: '9.0.x'
+          runtime-only: true
 
       - name: Verify installation
         run: dotnet --version
