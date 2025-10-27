@@ -1,16 +1,16 @@
-name: Reproduce Setup-Dotnet 356
+name: Reproduce Setup-Dotnet 674
 
 on:
-  # push:
-  #   branches:
-  #     - test-588
+  push:
+    branches:
+      - test-588
   workflow_dispatch:
 
 jobs:
   setup-dotnet:
     strategy:
       matrix:
-        os: [windows-latest, macos-13, ubuntu-22.04, ubuntu-latest]
+        os: [macos-latest]
 
       fail-fast: false
     runs-on: ${{ matrix.os }}
@@ -20,11 +20,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        # uses: actions/setup-dotnet@v4
-        uses: akv-platform/setup-dotnet@prefer-installed
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
-          prefer-installed: true
+    
 
       - name: Verify installation
         run: dotnet --version
