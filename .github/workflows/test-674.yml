@@ -10,7 +10,7 @@ jobs:
   setup-dotnet:
     strategy:
       matrix:
-        os: [macos-latest, macos-14-large, macos-latest-large]
+        os: [macos-latest, macos-14, macos-26]
 
       fail-fast: false
     runs-on: ${{ matrix.os }}
@@ -19,6 +19,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Clear .NET cache
+        run: |
+          rm -rf ~/.dotnet
+          rm -rf ~/.nuget/packages
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
