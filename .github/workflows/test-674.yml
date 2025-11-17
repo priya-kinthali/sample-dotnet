@@ -12,6 +12,7 @@ jobs:
       matrix:
         # os: [windows-latest, ubuntu-latest, macos-latest, macos-14, macos-26]
         os: [windows-latest]
+        dotnet: [ '7.0.x', '8.0.x', '9.0.x' ]
 
 
       fail-fast: false
@@ -27,11 +28,16 @@ jobs:
       #     rm -rf ~/.nuget/packages
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
+        id: stepid
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: ${{ matrix.dotnet }}
+          # dotnet-version: '9.0.x'
           # global-json-file: global.json
     
+      - name: Create temporary global.json
+        run: |
+          echo '{"sdk":{"version": "${{ steps.dotnet.outputs.dotnet-version }}"}}' > ./global.json
 
       - name: Verify installation
         run: dotnet --version
