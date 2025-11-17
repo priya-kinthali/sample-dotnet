@@ -25,12 +25,7 @@ jobs:
       #   run: |
       #     rm -rf ~/.dotnet
       #     rm -rf ~/.nuget/packages
-      - name: Clear .NET cache
-        if: runner.os == 'Windows'
-        run: |
-          Remove-Item -Recurse -Force "$env:USERPROFILE\.dotnet"
-          Remove-Item -Recurse -Force "$env:USERPROFILE\.nuget\packages"
-        shell: pwsh
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
