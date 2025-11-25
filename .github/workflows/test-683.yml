@@ -14,7 +14,7 @@ jobs:
         dotnet: [ '7.0.x', '8.0.x', '9.0.x', '10.0.x' ]
       fail-fast: false
     runs-on: ${{ matrix.os }}
-    name: Dotnet ${{ matrix.dotnet }} sample
+    name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
       - name: Setup dotnet
@@ -26,7 +26,11 @@ jobs:
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
 
-      - name: Show generated global.json content (cmd)
+      - name: Show generated global.json content (Windows)
+        if: runner.os == 'Windows'
         run: type global.json
+      - name: Show generated global.json content (Unix)
+        if: runner.os != 'Windows'
+        run: cat global.json
       - name: Dotnet Info
         run: dotnet --info
