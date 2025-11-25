@@ -22,15 +22,14 @@ jobs:
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
-      # - name: Create temporary global.json
-      #   run: |
-      #     echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
+      - name: Create temporary global.json
+        run: echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
 
-      # - name: Show generated global.json content (Windows)
-      #   if: runner.os == 'Windows'
-      #   run: type global.json
-      # - name: Show generated global.json content (Unix)
-      #   if: runner.os != 'Windows'
-      #   run: cat global.json
+      - name: Show generated global.json content (Windows)
+        if: runner.os == 'Windows'
+        run: type global.json
+      - name: Show generated global.json content (Unix)
+        if: runner.os != 'Windows'
+        run: cat global.json
       - name: Dotnet Info
         run: dotnet --info
