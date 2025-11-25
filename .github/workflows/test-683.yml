@@ -1,0 +1,32 @@
+name: Test global.json Creation on Windows
+
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest, macos-14, macos-26]
+        dotnet: [ '7.0.x', '8.0.x', '9.0.x', '10.0.x' ]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    name: Dotnet ${{ matrix.dotnet }} sample
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v5
+        id: stepid
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+      - name: Create temporary global.json
+        run: |
+          echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
+
+      - name: Show generated global.json content (cmd)
+        run: type global.json
+      - name: Dotnet Info
+        run: dotnet --info

@@ -1,9 +1,9 @@
 name: Reproduce Setup-Dotnet 674
 
 on:
-  push:
-    branches:
-      - test-588
+  # push:
+  #   branches:
+  #     - test-588
   workflow_dispatch:
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # - name: Clear .NET cache
       #   run: |
