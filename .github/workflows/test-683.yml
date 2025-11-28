@@ -18,6 +18,17 @@ jobs:
     name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
+      - name: Install PowerShell Core (pwsh)
+        if: runner.os == 'Windows'
+        run: |
+          if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
+            # Download latest MSI
+            $url = 'https://github.com/PowerShell/PowerShell/releases/latest/download/PowerShell-7.4.0-win-x64.msi'
+            $msi = "$env:TEMP\pwsh.msi"
+            Invoke-WebRequest -Uri $url -OutFile $msi
+            Start-Process msiexec.exe -ArgumentList "/i $msi /quiet /norestart" -Wait
+          }
+        shell: powershell
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         id: stepid
@@ -26,6 +37,7 @@ jobs:
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
+        shell: pwsh
       - name: Show generated global.json content (Windows)
         if: runner.os == 'Windows'
         run: type global.json
