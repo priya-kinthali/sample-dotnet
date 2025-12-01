@@ -11,7 +11,8 @@ jobs:
     strategy:
       matrix:
         # os: [windows-latest, ubuntu-24.04, ubuntu-latest, macos-latest, macos-14, macos-26]
-        os: [self-hosted]
+        # os: [self-hosted]
+        os: [macos-selfhosted]
         dotnet: [ '7.0.x', '8.0.x', '9.0.x', '10.0.x' ]
       fail-fast: false
     runs-on: ${{ matrix.os }}
@@ -35,8 +36,8 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
           # cache: true
           # cache-dependency-path: src/Library/packages.lock.json
-        env:
-          DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+        # env:
+        #   DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
