@@ -42,3 +42,7 @@ jobs:
         run: cat global.json
       - name: Dotnet Info
         run: dotnet --info
+      
+      - name: Restore dependencies
+        run: dotnet restore src/Library/packages.lock.json
+      
