@@ -25,11 +25,11 @@ jobs:
         run: rm -rf ${{ runner.temp }}/.dotnet
       - name: Clear dotnet cache
         run: rm -rf $HOME/.dotnet
-      - name: List installed .NET SDKs
-        run: $HOME/.dotnet/dotnet --list-sdks
+      # - name: List installed .NET SDKs
+      #   run: $HOME/.dotnet/dotnet --list-sdks
 
-      - name: List installed .NET runtimes
-        run: $HOME/.dotnet/dotnet --list-runtimes
+      # - name: List installed .NET runtimes
+      #   run: $HOME/.dotnet/dotnet --list-runtimes
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         id: stepid
