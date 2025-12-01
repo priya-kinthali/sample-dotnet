@@ -24,13 +24,13 @@ jobs:
       - uses: actions/checkout@v6
       # - name: Clear dotnet cache
       #   run: rm -rf ${{ runner.temp }}/.dotnet
-      - name: Clear dotnet cache
-        if: runner.os != 'Windows'
-        run: rm -rf $HOME/.dotnet
-      - name: Clear dotnet cache (Windows)
-        if: runner.os == 'Windows'
-        run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
-        shell: pwsh
+      # - name: Clear dotnet cache
+      #   if: runner.os != 'Windows'
+      #   run: rm -rf $HOME/.dotnet
+      # - name: Clear dotnet cache (Windows)
+      #   if: runner.os == 'Windows'
+      #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
+      #   shell: pwsh
       # - name: List installed .NET SDKs
       #   run: $HOME/.dotnet/dotnet --list-sdks
 
