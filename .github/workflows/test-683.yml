@@ -11,10 +11,10 @@ jobs:
     strategy:
       matrix:
         # os: [windows-latest, ubuntu-24.04, ubuntu-latest, macos-latest, macos-14, macos-26]
-        os: [self-hosted]
+        os: [self-hosted, ubuntu-latest, windows-latest, macos-latest]
         # os: [macos-selfhosted]
         # dotnet: [ '7.0.x', '8.0.x', '9.0.x', '10.0.x' ]
-        dotnet: [  '9.0.x' ]
+        dotnet: [  '9.0.x', '10.0.x' ]
 
       fail-fast: false
     runs-on: ${{ matrix.os }}
