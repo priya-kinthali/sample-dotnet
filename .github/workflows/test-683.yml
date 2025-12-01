@@ -26,6 +26,8 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet }}
           cache: true
+          cache-dependency-path: src/Library/packages.lock.json
+
         env:
           DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
       - name: Create temporary global.json
