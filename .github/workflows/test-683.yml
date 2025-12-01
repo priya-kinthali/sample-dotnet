@@ -14,7 +14,7 @@ jobs:
         os: [self-hosted]
         # os: [macos-selfhosted]
         # dotnet: [ '7.0.x', '8.0.x', '9.0.x', '10.0.x' ]
-        dotnet: [  '9.0.x', '10.0.x' ]
+        dotnet: [  '9.0.x' ]
 
       fail-fast: false
     runs-on: ${{ matrix.os }}
