@@ -25,6 +25,7 @@ jobs:
       # - name: Clear dotnet cache
       #   run: rm -rf ${{ runner.temp }}/.dotnet
       - name: Clear dotnet cache
+        if: runner.os == 'Linux'
         run: rm -rf $HOME/.dotnet
       # - name: List installed .NET SDKs
       #   run: $HOME/.dotnet/dotnet --list-sdks
