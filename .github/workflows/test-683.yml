@@ -15,14 +15,16 @@ jobs:
         dotnet: [ '7.0.x', '8.0.x', '9.0.x', '10.0.x' ]
       fail-fast: false
     runs-on: ${{ matrix.os }}
-    env:
-      # DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
-      DOTNET_INSTALL_DIR: $HOME/.dotnet
+    # env:
+    #   # DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+    #   DOTNET_INSTALL_DIR: $HOME/.dotnet
     name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      # - name: Clear dotnet cache
-      #   run: rm -rf ${{ runner.temp }}/.dotnet
+      - name: Clear dotnet cache
+        run: rm -rf ${{ runner.temp }}/.dotnet
+      - name: Clear dotnet cache
+        run: rm -rf $HOME/.dotnet
       - name: List installed .NET SDKs
         run: $HOME/.dotnet/dotnet --list-sdks
 
@@ -33,8 +35,8 @@ jobs:
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
-          cache: true
-          cache-dependency-path: src/Library/packages.lock.json
+          # cache: true
+          # cache-dependency-path: src/Library/packages.lock.json
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
@@ -48,6 +50,6 @@ jobs:
       - name: Dotnet Info
         run: dotnet --info
       
-      - name: Restore dependencies
-        run: dotnet restore src/Library/Library.csproj
+      # - name: Restore dependencies
+      #   run: dotnet restore src/Library/Library.csproj
       
