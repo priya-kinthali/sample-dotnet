@@ -29,7 +29,9 @@ jobs:
           cache-dependency-path: src/Library/packages.lock.json
 
         env:
-          DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+          # DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+          DOTNET_INSTALL_DIR: $HOME/.dotnet
+
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
