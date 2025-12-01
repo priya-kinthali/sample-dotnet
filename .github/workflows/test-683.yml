@@ -11,8 +11,8 @@ jobs:
     strategy:
       matrix:
         # os: [windows-latest, ubuntu-24.04, ubuntu-latest, macos-latest, macos-14, macos-26]
-        # os: [self-hosted]
-        os: [macos-selfhosted]
+        os: [self-hosted]
+        # os: [macos-selfhosted]
         # dotnet: [ '7.0.x', '8.0.x', '9.0.x', '10.0.x' ]
         dotnet: [  '9.0.x', '10.0.x' ]
 
@@ -32,7 +32,8 @@ jobs:
       # - name: List installed .NET runtimes
       #   run: $HOME/.dotnet/dotnet --list-runtimes
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v5
+        # uses: actions/setup-dotnet@v5
+        uses: priya-kinthali/setup-dotnet@test-path 
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
@@ -50,8 +51,8 @@ jobs:
       - name: Show generated global.json content (Unix)
         if: runner.os != 'Windows'
         run: cat global.json
-      # - name: Dotnet Info
-      #   run: dotnet --info
+      - name: Dotnet Info
+        run: dotnet --info
       
       # - name: Restore dependencies
       #   run: dotnet restore src/Library/Library.csproj
