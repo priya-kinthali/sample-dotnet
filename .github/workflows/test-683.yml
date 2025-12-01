@@ -19,10 +19,10 @@ jobs:
     name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      - name: Clear dotnet cache
-        run: rm -rf ${{ runner.temp }}/.dotnet
-      - name: Clear dotnet cache
-        run: rm -rf $HOME/.dotnet
+      # - name: Clear dotnet cache
+      #   run: rm -rf ${{ runner.temp }}/.dotnet
+      # - name: Clear dotnet cache
+      #   run: rm -rf $HOME/.dotnet
       # - name: List installed .NET SDKs
       #   run: $HOME/.dotnet/dotnet --list-sdks
 
