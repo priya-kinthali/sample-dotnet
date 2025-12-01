@@ -44,5 +44,5 @@ jobs:
         run: dotnet --info
       
       - name: Restore dependencies
-        run: dotnet restore src/Library/packages.lock.json
+        run: dotnet restore src/Library/Library.csproj
       
