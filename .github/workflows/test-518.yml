@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - test-588
-  workflow_dispatch:
+env:
+  DOTNET_INSTALL_DIR: $HOME/.dotnet
+
 
 jobs:
   build:
@@ -29,8 +31,8 @@ jobs:
       - name: Show runner HOME (debug)
         run: |
           echo "Actual HOME is: $HOME"
-      - name: Set DOTNET_INSTALL_DIR and persist to GITHUB_ENV
-        run: echo "DOTNET_INSTALL_DIR=$HOME/.dotnet" >> $GITHUB_ENV
+      # - name: Set DOTNET_INSTALL_DIR and persist to GITHUB_ENV
+      #   run: echo "DOTNET_INSTALL_DIR=$HOME/.dotnet" >> $GITHUB_ENV
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         id: stepid
@@ -38,10 +40,10 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
         # env:
         #   DOTNET_INSTALL_DIR: ${{ env.DOTNET_INSTALL_DIR }}
-      # - name: List contents of $HOME/.dotnet
-      #   run: |
-      #     echo "Listing files of $HOME/.dotnet:"
-      #     ls -l "$HOME/.dotnet"
+      - name: List contents of $HOME/.dotnet
+        run: |
+          echo "Listing files of $HOME/.dotnet:"
+          ls -l "$HOME/.dotnet"
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
