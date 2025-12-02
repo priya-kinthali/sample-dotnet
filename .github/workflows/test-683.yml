@@ -10,8 +10,8 @@ jobs:
   build:
     strategy:
       matrix:
-        # os: [windows-latest, ubuntu-24.04, ubuntu-latest, macos-latest, macos-14, macos-26]
-        os: [self-hosted, ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest, ubuntu-24.04, ubuntu-latest, macos-latest, macos-14, macos-26]
+        # os: [self-hosted, ubuntu-latest, windows-latest, macos-latest]
         # os: [macos-selfhosted]
         # dotnet: [ '7.0.x', '8.0.x', '9.0.x', '10.0.x' ]
         dotnet: [  '9.0.x', '10.0.x' ]
@@ -37,8 +37,8 @@ jobs:
       # - name: List installed .NET runtimes
       #   run: $HOME/.dotnet/dotnet --list-runtimes
       - name: Setup dotnet
-        # uses: actions/setup-dotnet@v5
-        uses: priya-kinthali/setup-dotnet@test-path 
+        uses: actions/setup-dotnet@v5
+        # uses: priya-kinthali/setup-dotnet@test-path 
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
@@ -49,7 +49,7 @@ jobs:
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
-
+        shell: cmd
       - name: Show generated global.json content (Windows)
         if: runner.os == 'Windows'
         run: type global.json
