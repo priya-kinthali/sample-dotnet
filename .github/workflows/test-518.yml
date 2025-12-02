@@ -23,8 +23,12 @@ jobs:
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
-        # env:
-        #   DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+        env:
+          DOTNET_INSTALL_DIR: $HOME/.dotnet
+      - name: List contents of $HOME/.dotnet
+        run: |
+          echo "Contents of $HOME/.dotnet:"
+          ls -al $HOME/.dotnet
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
