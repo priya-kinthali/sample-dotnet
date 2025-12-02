@@ -28,22 +28,28 @@ jobs:
       #     else
       #       echo "$HOME/.dotnet not present, nothing to clean."
       #     fi
-      - name: Show runner HOME (debug)
-        run: |
-          echo "Actual HOME is: $HOME"
-      - name: Set DOTNET_INSTALL_DIR and persist to GITHUB_ENV
-        run: echo "DOTNET_INSTALL_DIR=$HOME/.dotnet" >> $GITHUB_ENV
+      # - name: Show runner HOME (debug)
+      #   run: |
+      #     echo "Actual HOME is: $HOME"
+      # - name: Set DOTNET_INSTALL_DIR and persist to GITHUB_ENV
+      #   run: echo "DOTNET_INSTALL_DIR=$HOME/.dotnet" >> $GITHUB_ENV
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
-        # env:
-        #   DOTNET_INSTALL_DIR: ${{ env.DOTNET_INSTALL_DIR }}
-      - name: List contents of $HOME/.dotnet
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+      - name: List contents of runner.temp/.dotnet
         run: |
-          echo "Listing files of $HOME/.dotnet:"
-          ls -l "$HOME/.dotnet"
+          echo "Listing files of $DOTNET_INSTALL_DIR:"
+          ls -l "$DOTNET_INSTALL_DIR"
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+      # - name: List contents of $HOME/.dotnet
+      #   run: |
+      #     echo "Listing files of $HOME/.dotnet:"
+      #     ls -l "$HOME/.dotnet"
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
