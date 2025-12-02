@@ -38,8 +38,8 @@ jobs:
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
-        # env:
-        #   DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+        env:
+          DOTNET_INSTALL_DIR: ${{ env.DOTNET_INSTALL_DIR }}
       - name: List contents of runner.temp/.dotnet
         run: |
           echo "Listing files of $DOTNET_INSTALL_DIR:"
