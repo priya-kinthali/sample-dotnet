@@ -26,7 +26,6 @@ jobs:
           sudo rm -rf /usr/local/share/dotnet
           rm -rf ~/.dotnet
           rm -rf ~/.nuget/packages
-          dotnet nuget locals all --clear
       # - name: Clear $HOME/.dotnet (clean .NET SDK cache)
       #   run: |
       #     if [ -d "$HOME/.dotnet" ]; then
