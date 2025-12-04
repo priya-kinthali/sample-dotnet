@@ -20,10 +20,11 @@ jobs:
     name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      - name: Clear .NET cache
+      - name: Clear .NET and NuGet cache
         run: |
           rm -rf ~/.dotnet
           rm -rf ~/.nuget/packages
+          dotnet nuget locals all --clear
       # - name: Clear $HOME/.dotnet (clean .NET SDK cache)
       #   run: |
       #     if [ -d "$HOME/.dotnet" ]; then
