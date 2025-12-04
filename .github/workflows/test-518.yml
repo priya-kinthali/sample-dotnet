@@ -20,8 +20,10 @@ jobs:
     name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      - name: Clear .NET and NuGet cache
+      - name: Remove .NET SDKs/runtimes from common locations
         run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/share/dotnet
           rm -rf ~/.dotnet
           rm -rf ~/.nuget/packages
           dotnet nuget locals all --clear
