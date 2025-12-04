@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [self-hosted]
+        os: [ubuntu-latest]
         dotnet: [  '9.0.x', '10.0.x' ]
 
       fail-fast: false
@@ -20,6 +20,10 @@ jobs:
     name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
+      # - name: Clear .NET cache
+      #   run: |
+      #     rm -rf ~/.dotnet
+      #     rm -rf ~/.nuget/packages
       # - name: Clear $HOME/.dotnet (clean .NET SDK cache)
       #   run: |
       #     if [ -d "$HOME/.dotnet" ]; then
@@ -31,26 +35,26 @@ jobs:
       # - name: Show runner HOME (debug)
       #   run: |
       #     echo "Actual HOME is: $HOME"
-      - name: Show runner.temp value (debug)
-        run: echo  ${{ runner.temp }}
-      - name: List contents of runner.temp/.dotnet before setup-dotnet
-        run: |
-          DOTNETDIR="${{ runner.temp }}/.dotnet"
-          echo "Listing contents of $DOTNETDIR"
-          ls -alh "$DOTNETDIR" || echo "Directory does not exist yet"
-      - name: Set DOTNET_INSTALL_DIR to runner.temp/.dotnet and persist to GITHUB_ENV
-        run: echo "DOTNET_INSTALL_DIR=${{ runner.temp }}/.dotnet" >> $GITHUB_ENV
+      # - name: Show runner.temp value (debug)
+      #   run: echo  ${{ runner.temp }}
+      # - name: List contents of runner.temp/.dotnet before setup-dotnet
+      #   run: |
+      #     DOTNETDIR="${{ runner.temp }}/.dotnet"
+      #     echo "Listing contents of $DOTNETDIR"
+      #     ls -alh "$DOTNETDIR" || echo "Directory does not exist yet"
+      # - name: Set DOTNET_INSTALL_DIR to runner.temp/.dotnet and persist to GITHUB_ENV
+      #   run: echo "DOTNET_INSTALL_DIR=${{ runner.temp }}/.dotnet" >> $GITHUB_ENV
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
-        env:
-          DOTNET_INSTALL_DIR: ${{ env.DOTNET_INSTALL_DIR }}
-      - name: List contents of runner.temp/.dotnet
-        run: |
-          echo "Listing files of $DOTNET_INSTALL_DIR:"
-          ls -l "$DOTNET_INSTALL_DIR"
+        # env:
+        #   DOTNET_INSTALL_DIR: ${{ env.DOTNET_INSTALL_DIR }}
+      # - name: List contents of runner.temp/.dotnet
+      #   run: |
+      #     echo "Listing files of $DOTNET_INSTALL_DIR:"
+      #     ls -l "$DOTNET_INSTALL_DIR"
         # env:
         #   DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
       # - name: List contents of $HOME/.dotnet
