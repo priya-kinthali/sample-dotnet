@@ -20,6 +20,9 @@ jobs:
     name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
+      - name: Show runner HOME (debug)
+        run: |
+          echo "Actual HOME is: $HOME"
       - name: Remove .NET SDKs/runtimes from common locations
         run: |
           sudo rm -rf /usr/share/dotnet
