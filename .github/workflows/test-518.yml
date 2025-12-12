@@ -8,13 +8,15 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-24.04-arm, ubuntu-24.04]
+        # os: [ubuntu-24.04-arm, ubuntu-24.04]
+        os: [self-hosted]
+
         dotnet: [  '9.0.x', '10.0.x' ]
 
       fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
-      DOTNET_INSTALL_DIR: temp/.dotnet
+      DOTNET_INSTALL_DIR: statictemp/.dotnet
     name: Setup dotnet ${{ matrix.dotnet }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
@@ -38,10 +40,10 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
         # env:
         #   DOTNET_INSTALL_DIR: ${{ env.DOTNET_INSTALL_DIR }}
-      - name: List contents of temp/.dotnet
+      - name: List contents of statictemp/.dotnet
         run: |
-          echo "Listing files of temp/.dotnet:"
-          ls -l "temp/.dotnet"
+          echo "Listing files of statictemp/.dotnet:"
+          ls -l "statictemp/.dotnet"
       - name: Create temporary global.json
         run: |
           echo '{"sdk":{"version": "${{ steps.stepid.outputs.dotnet-version }}"}}' > ./global.json
