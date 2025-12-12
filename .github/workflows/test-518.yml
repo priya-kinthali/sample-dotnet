@@ -8,7 +8,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [self-hosted]
+        os: [ubuntu-24.04]
         dotnet: [  '9.0.x', '10.0.x' ]
 
       fail-fast: false
