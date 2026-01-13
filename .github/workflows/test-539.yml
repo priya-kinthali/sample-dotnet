@@ -26,7 +26,7 @@ jobs:
       #     rm -rf ~/.nuget/packages
 
       - name: Set up .NET Core
-        uses: ZxillyFork/setup-dotnet@main
+        uses: priya-kinthali/setup-dotnet@test-539
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
