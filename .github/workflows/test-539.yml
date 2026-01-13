@@ -47,3 +47,4 @@ jobs:
 
       - name: List installed runtimes
         run: dotnet --list-runtimes
+      - run: dotnet restore --locked-mode
