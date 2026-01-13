@@ -1,0 +1,47 @@
+name: Reproduce Setup-Dotnet 674
+
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  setup-dotnet:
+    strategy:
+      matrix:
+        # os: [windows-latest, ubuntu-latest, macos-latest, macos-14, macos-26]
+        os: [macos-14, macos-15-intel]
+        dotnet: [ '10.0.100' ]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # - name: Clear .NET cache
+      #   run: |
+      #     rm -rf ~/.dotnet
+      #     rm -rf ~/.nuget/packages
+
+      - name: Set up .NET Core
+        uses: ZxillyFork/setup-dotnet@main
+        id: stepid
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+          # dotnet-version: '9.0.x'
+          # global-json-file: global.json
+    
+      - name: Create temporary global.json
+        run: |
+          echo '{"sdk":{"version": "${{ steps.dotnet.outputs.dotnet-version }}"}}' > ./global.json
+
+      - name: Verify installation
+        run: dotnet --version
+
+      - name: List installed SDKs
+        run: dotnet --list-sdks
+
+      - name: List installed runtimes
+        run: dotnet --list-runtimes
