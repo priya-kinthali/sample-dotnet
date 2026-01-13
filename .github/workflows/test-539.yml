@@ -31,6 +31,7 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet }}
           cache: true
+          cache-dependency-path: src/Library/packages.lock.json
           # dotnet-version: '9.0.x'
           # global-json-file: global.json
     
