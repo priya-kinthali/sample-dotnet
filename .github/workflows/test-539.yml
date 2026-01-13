@@ -30,6 +30,7 @@ jobs:
         id: stepid
         with:
           dotnet-version: ${{ matrix.dotnet }}
+          cache: true
           # dotnet-version: '9.0.x'
           # global-json-file: global.json
     
