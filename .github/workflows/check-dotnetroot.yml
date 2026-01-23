@@ -26,6 +26,11 @@ jobs:
       - name: Verify installation
         run: dotnet --version
 
-      - name: Show DOTNET_ROOT environment variable
+      # - name: Show DOTNET_ROOT environment variable
+      #   run: |
+      #     echo "DOTNET_ROOT=$DOTNET_ROOT"
+      - name: Set DOTNET_ROOT in GitHub Actions environment (macOS)
         run: |
-          echo "DOTNET_ROOT=$DOTNET_ROOT"
+          echo "DOTNET_ROOT=/custom/dotnet/path" >> $GITHUB_ENV
+      - name: Show dotnet installation path
+        run: which dotnet
