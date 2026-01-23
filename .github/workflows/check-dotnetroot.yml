@@ -32,5 +32,7 @@ jobs:
       - name: Set DOTNET_ROOT in GitHub Actions environment (macOS)
         run: |
           echo "DOTNET_ROOT=/custom/dotnet/path" >> $GITHUB_ENV
+      - name: Show updated DOTNET_ROOT
+        run: echo "DOTNET_ROOT=$DOTNET_ROOT"
       - name: Show dotnet installation path
         run: which dotnet
