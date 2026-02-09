@@ -32,9 +32,6 @@ jobs:
           rm -rf "${TEMP_DIR}"
           apt-get update
           apt-get install -y powershell
-      - name: Clear toolcache
-        shell: pwsh
-        run: __tests__/clear-toolcache.ps1 ${{ runner.os }}
       - name: Setup dotnet 10.0
         uses: actions/setup-dotnet@v5
         with:
