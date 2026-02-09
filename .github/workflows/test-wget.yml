@@ -29,7 +29,6 @@ jobs:
           TEMP_DIR="$(mktemp -d)"
           wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" -O "${TEMP_DIR}/packages-microsoft-prod.deb"
           dpkg -i "${TEMP_DIR}/packages-microsoft-prod.deb"
-          dpkg -i packages-microsoft-prod.deb
           rm -rf "${TEMP_DIR}"
           apt-get update
           apt-get install -y powershell
