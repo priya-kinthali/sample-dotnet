@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v6
       - name: Install Powershell
         run: |
-          set -euo pipefail
+          set -eu
           apt-get update
           apt-get install -y wget apt-transport-https software-properties-common
           TEMP_DIR="$(mktemp -d)"
