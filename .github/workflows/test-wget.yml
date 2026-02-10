@@ -22,18 +22,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Install Powershell
+      - name: Check if PowerShell is installed
         run: |
-          set -eu
-          apt-get update
-          apt-get install -y wget apt-transport-https software-properties-common
-          TEMP_DIR="$(mktemp -d)"
-          wget -q -O "${TEMP_DIR}/packages-microsoft-prod.deb" "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
-          dpkg-deb --info "${TEMP_DIR}/packages-microsoft-prod.deb" >/dev/null
-          dpkg -i "${TEMP_DIR}/packages-microsoft-prod.deb"
-          rm -rf "${TEMP_DIR}"
-          apt-get update
-          apt-get install -y powershell
+          if command -v pwsh >/dev/null 2>&1; then
+            echo "PowerShell is already installed"
+            pwsh --version
+          else
+            echo "PowerShell is NOT installed"
+          fi
+      # - name: Install Powershell
+      #   run: |
+      #     set -eu
+      #     apt-get update
+      #     apt-get install -y wget apt-transport-https software-properties-common
+      #     TEMP_DIR="$(mktemp -d)"
+      #     wget -q -O "${TEMP_DIR}/packages-microsoft-prod.deb" "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
+      #     dpkg-deb --info "${TEMP_DIR}/packages-microsoft-prod.deb" >/dev/null
+      #     dpkg -i "${TEMP_DIR}/packages-microsoft-prod.deb"
+      #     rm -rf "${TEMP_DIR}"
+      #     apt-get update
+      #     apt-get install -y powershell
       - name: Setup dotnet 10.0
         uses: actions/setup-dotnet@v5
         with:
