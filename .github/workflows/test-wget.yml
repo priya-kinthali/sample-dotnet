@@ -30,6 +30,8 @@ jobs:
           else
             echo "PowerShell is NOT installed"
           fi
+      - name: Install curl
+        run: apt-get update && apt-get install -y curl
       # - name: Install Powershell
       #   run: |
       #     set -eu
