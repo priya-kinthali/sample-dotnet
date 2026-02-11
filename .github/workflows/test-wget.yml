@@ -9,11 +9,11 @@ jobs:
   test-proxy:
     runs-on: ubuntu-24.04
     container:
-      image: ubuntu:22.04
-      # options: --dns 127.0.0.1
+      image: mcr.microsoft.com/devcontainers/dotnet:latest
+      options: --dns 127.0.0.1
     services:
       squid-proxy:
-        image: mcr.microsoft.com/devcontainers/dotnet:latest
+        image: ubuntu/squid:latest
         ports:
           - 3128:3128
     env:
