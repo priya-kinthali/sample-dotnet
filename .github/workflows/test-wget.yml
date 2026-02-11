@@ -13,7 +13,7 @@ jobs:
       options: --dns 127.0.0.1
     services:
       squid-proxy:
-        image: ubuntu/squid:latest
+        image: mcr.microsoft.com/devcontainers/dotnet:latest
         ports:
           - 3128:3128
     env:
@@ -30,8 +30,8 @@ jobs:
           else
             echo "PowerShell is NOT installed"
           fi
-      - name: Install curl
-        run: apt-get update && apt-get install -y curl
+      # - name: Install curl
+      #   run: apt-get update && apt-get install -y curl
       # - name: Install Powershell
       #   run: |
       #     set -eu
