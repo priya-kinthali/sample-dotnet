@@ -19,7 +19,7 @@ jobs:
         uses: lmvysakh/setup-dotnet@support_architecture
         with:
           dotnet-version: 8.0.x
-          architecture: "   "
+          architecture: " x86  "
       - run: dotnet --info
 
       # - name: Setup dotnet - architecture case normalization (X64)
