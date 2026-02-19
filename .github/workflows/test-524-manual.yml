@@ -36,7 +36,7 @@ jobs:
             DOTNET_ROOT="$RUNNER_TEMP/dotnet"
             mkdir -p "$DOTNET_ROOT"
           fi
-          arch="x86"
+          arch="x64"
           echo "DOTNET_ROOT=$DOTNET_ROOT" >> "$GITHUB_ENV"
           echo "$DOTNET_ROOT" >> "$GITHUB_PATH"
           curl -fsSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
