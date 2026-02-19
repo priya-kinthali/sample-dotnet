@@ -14,16 +14,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest, macos-15-intel, ubuntu-24.04-arm, windows-11-arm ]
     steps:
       - uses: actions/checkout@v6
-      - name: Setup dotnet - architecture omitted (auto)
+
+      - name: Setup dotnet - architecture whitespace (auto)
         uses: lmvysakh/setup-dotnet@support_architecture
         with:
           dotnet-version: 8.0.x
-
-      # - name: Setup dotnet - architecture whitespace (auto)
-      #   uses: lmvysakh/setup-dotnet@support_architecture
-      #   with:
-      #     dotnet-version: 8.0.x
-      #     architecture: "   "
+          architecture: "   "
 
       # - name: Setup dotnet - architecture case normalization (X64)
       #   uses: lmvysakh/setup-dotnet@support_architecture
