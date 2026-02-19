@@ -16,6 +16,12 @@ jobs:
         os: [macos-latest]
     steps:
       - uses: actions/checkout@v6
+      - name: cleae cache
+        run: |
+          echo "Clearing cache for dotnet setup"
+          rm -rf ~/.dotnet
+          rm -rf ~/.nuget/packages
+
 
       - name: Setup dotnet - architecture whitespace (auto)
         uses: lmvysakh/setup-dotnet@support_architecture
