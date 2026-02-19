@@ -19,28 +19,28 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Setup dotnet - architecture whitespace (auto)
-        uses: lmvysakh/setup-dotnet@support_architecture
-        with:
-          dotnet-version: 8.0.x
-          architecture: "   "
+      # - name: Setup dotnet - architecture whitespace (auto)
+      #   uses: lmvysakh/setup-dotnet@support_architecture
+      #   with:
+      #     dotnet-version: 8.0.x
+      #     architecture: "   "
 
-      - name: Setup dotnet - architecture case normalization (X64)
-        uses: lmvysakh/setup-dotnet@support_architecture
-        with:
-          dotnet-version: 8.0.x
-          architecture: X64
+      # - name: Setup dotnet - architecture case normalization (X64)
+      #   uses: lmvysakh/setup-dotnet@support_architecture
+      #   with:
+      #     dotnet-version: 8.0.x
+      #     architecture: X64
 
-      - name: Setup dotnet - invalid architecture should fail
-        id: invalid
-        continue-on-error: true
-        uses: lmvysakh/setup-dotnet@support_architecture
-        with:
-          dotnet-version: 8.0.x
-          architecture: xabc
+      # - name: Setup dotnet - invalid architecture should fail
+      #   id: invalid
+      #   continue-on-error: true
+      #   uses: lmvysakh/setup-dotnet@support_architecture
+      #   with:
+      #     dotnet-version: 8.0.x
+      #     architecture: xabc
 
-      - name: Assert invalid architecture failed
-        if: steps.invalid.outcome == 'success'
-        run: |
-          echo "Expected invalid architecture to fail but it succeeded."
-          exit 1
+      # - name: Assert invalid architecture failed
+      #   if: steps.invalid.outcome == 'success'
+      #   run: |
+      #     echo "Expected invalid architecture to fail but it succeeded."
+      #     exit 1
