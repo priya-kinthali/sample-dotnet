@@ -8,7 +8,10 @@ on:
 
 jobs:
   arch-validation:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest, macos-15-intel, ubuntu-24.04-arm, windows-11-arm ]
     steps:
       - uses: actions/checkout@v6
       - name: Setup dotnet - architecture omitted (auto)
