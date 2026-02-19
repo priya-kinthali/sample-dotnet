@@ -1,0 +1,53 @@
+name: manual installation
+
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  arch-validation:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # os: [ubuntu-latest, windows-latest, macos-latest, macos-15-intel, ubuntu-24.04-arm, windows-11-arm ]
+        os: [macos-latest]
+    steps:
+      - uses: actions/checkout@v6 
+      - name: Install .NET Runtime (Linux/macOS)
+        if: runner.os != 'Windows'
+        shell: bash
+        env:
+          RUNTIME: dotnet          # dotnet | aspnetcore
+          RUNTIME_VERSION: 10.0.3  # runtime version (not SDK version like 10.0.103)
+        run: |
+          set -euo pipefail
+          # your defaults, with safe fallback for Linux
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            desired="/usr/share/dotnet"
+          else
+            desired="$HOME/.dotnet"
+          fi
+          if mkdir -p "$desired" 2>/dev/null; then
+            DOTNET_ROOT="$desired"
+          else
+            DOTNET_ROOT="$RUNNER_TEMP/dotnet"
+            mkdir -p "$DOTNET_ROOT"
+          fi
+          arch="x86"
+          echo "DOTNET_ROOT=$DOTNET_ROOT" >> "$GITHUB_ENV"
+          echo "$DOTNET_ROOT" >> "$GITHUB_PATH"
+          curl -fsSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+          chmod +x dotnet-install.sh
+          # --runtime dotnet => downloads Runtime/.../dotnet-runtime-<ver>-<os>-<arch>.*
+          ./dotnet-install.sh \
+            --runtime "$RUNTIME" \
+            --version "$RUNTIME_VERSION" \
+            --install-dir "$DOTNET_ROOT" \
+            --architecture "$arch" \
+            --verbose
+           
+      - name: dotnet --info
+        run: dotnet --info
