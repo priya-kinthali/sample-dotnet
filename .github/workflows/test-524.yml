@@ -27,7 +27,7 @@ jobs:
       # - run: dotnet --info
 
       # - uses: lmvysakh/setup-dotnet@support_architecture
-      - uses:  DataDog/setup-dotnet@architecture2
+      - uses:  lmvysakh/setup-dotnet@support_architecture_new
         with:
          Architecture : ${{ matrix.arch }}
          dotnet-version: | 
