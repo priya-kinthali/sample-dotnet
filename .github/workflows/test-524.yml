@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - run: |
+          dotnet --info
       - uses:  priya-kinthali/setup-dotnet@test-524
         with:
          Architecture : ${{ matrix.arch }}
