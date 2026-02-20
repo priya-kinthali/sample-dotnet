@@ -1,4 +1,4 @@
-name: check wget
+name: check cross arch
 on:
   push:
     branches:
@@ -6,29 +6,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  Architecture:
+
+   Crossarchitecture:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
             os: [macos-latest, ubuntu-latest, windows-latest, ubuntu-24.04-arm, windows-11-arm]
-            arch: [x64, x86, arm64, amd64, arm, s390x, ppc64le, riscv64]
-            
+            arch: [x64, x86, arm64, amd64, arm, s390x, ppc64le, riscv64]           
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: actions/setup-dotnet@v5
-      #   with:
-      #    dotnet-version: | 
-      #             8.0.x
-      #             8.0.x
-      # - run: dotnet --info
-
-      # - uses: lmvysakh/setup-dotnet@support_architecture
-      - uses:  lmvysakh/setup-dotnet@support_architecture_new
+      - uses:  priya-kinthali/setup-dotnet@test-524
         with:
          Architecture : ${{ matrix.arch }}
          dotnet-version: | 
-                  10.0.102       
+                  9.0.308
+                  10.0.101     
       - run: dotnet --info
