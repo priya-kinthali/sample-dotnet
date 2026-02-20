@@ -23,13 +23,14 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           cache: true
+          cache-dependency-path: Library/packages.lock.json
         #  dotnet-quality: 'preview'
         # global-json-file: csharp/global.json
         #  dotnet-version: | 
         #           9.0.308
         #           10.0.101     
       - run: dotnet --info
-      - run: dotnet restore Library/Library.csproj --locked-mode
+      - run: dotnet restore --locked-mode
   
   crossarchitecture:
     runs-on: ${{ matrix.os }}
@@ -49,10 +50,11 @@ jobs:
          architecture : ${{ matrix.arch }}
          dotnet-version: '10.0.x'
          cache: true
+         cache-dependency-path: Library/packages.lock.json
         #  dotnet-quality: 'preview'
         #  global-json-file: csharp/global.json
         #  dotnet-version: | 
         #           9.0.308
         #           10.0.101     
       - run: dotnet --info
-      - run: dotnet restore Library/Library.csproj --locked-mode
+      - run: dotnet restore --locked-mode
