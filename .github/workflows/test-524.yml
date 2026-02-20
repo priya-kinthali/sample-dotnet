@@ -29,7 +29,7 @@ jobs:
         #           9.0.308
         #           10.0.101     
       - run: dotnet --info
-      - run: dotnet restore --locked-mode
+      - run: dotnet restore Library/Library.csproj --locked-mode
   
   crossarchitecture:
     runs-on: ${{ matrix.os }}
@@ -55,4 +55,4 @@ jobs:
         #           9.0.308
         #           10.0.101     
       - run: dotnet --info
-      - run: dotnet restore --locked-mode
+      - run: dotnet restore Library/Library.csproj --locked-mode
