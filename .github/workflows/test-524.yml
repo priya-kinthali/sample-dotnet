@@ -52,7 +52,7 @@ jobs:
       - uses:  priya-kinthali/setup-dotnet@test-524
         with:
          architecture : ${{ matrix.arch }}
-         dotnet-version: '10.0.x'
+         dotnet-version: '10.0.102'
         #  cache: true
         #  cache-dependency-path: src/Library/packages.lock.json
         #  dotnet-quality: 'preview'
