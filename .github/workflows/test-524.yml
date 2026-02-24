@@ -1,4 +1,4 @@
-name: check cross arch
+name: check cross arch with info
 on:
   push:
     branches:
