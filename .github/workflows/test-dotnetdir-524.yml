@@ -42,7 +42,7 @@ jobs:
           Write-Host "DOTNET_ROOT is: $env:DOTNET_ROOT"
           Write-Host ""
           Write-Host "Installing .NET 9.0 runtime via dotnet-install.ps1 (uses DOTNET_INSTALL_DIR as default)..."
-          & 'D:\a\_actions\HarithaVattikuti\setup-dotnet\testarch\externals\install-dotnet.ps1' -Runtime dotnet -Channel 9.0
+          & 'D:\a\_actions\priya-kinthali\setup-dotnet\test-524\externals\install-dotnet.ps1' -Runtime dotnet -Channel 9.0
 
       # Now check: where did it actually install?
       - name: Verify where .NET 9.0 was installed
