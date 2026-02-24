@@ -16,7 +16,8 @@ jobs:
           "DOTNET_INSTALL_DIR=$env:USERPROFILE\.dotnet" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Install .NET x86
-        uses: priya-kinthali/setup-dotnet@add-architecture-support
+        # uses: priya-kinthali/setup-dotnet@add-architecture-support
+        uses: priya-kinthali/setup-dotnet@test-524
         # uses: HarithaVattikuti/setup-dotnet@testarch
         with:
           dotnet-version: '10.0.x'
@@ -29,7 +30,8 @@ jobs:
           Write-Host "DOTNET_INSTALL_DIR=$env:DOTNET_INSTALL_DIR"
           Write-Host "DOTNET_ROOT=$env:DOTNET_ROOT"
       - name: Install .NET x64
-        uses: priya-kinthali/setup-dotnet@add-architecture-support
+        # uses: priya-kinthali/setup-dotnet@add-architecture-support
+        uses: priya-kinthali/setup-dotnet@test-524
         # uses: HarithaVattikuti/setup-dotnet@testarch
         with:
           dotnet-version: '10.0.102'
