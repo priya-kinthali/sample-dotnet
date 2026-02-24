@@ -1,4 +1,4 @@
-name: Real impact of DOTNET_INSTALL_DIR mismatch
+name: Real impact of DOTNET_INSTALL_DIR mismatch cache
 
 on:
   push:
