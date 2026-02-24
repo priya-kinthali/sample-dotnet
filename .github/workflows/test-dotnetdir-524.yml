@@ -1,0 +1,77 @@
+name: Real impact of DOTNET_INSTALL_DIR mismatch
+
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  cross-arch-mismatch:
+    runs-on: windows-latest
+    name: "x86 install → build → run"
+    steps:
+      - name: Set DOTNET_INSTALL_DIR
+        run: |
+          "DOTNET_INSTALL_DIR=$env:USERPROFILE\.dotnet" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Install .NET x86
+        uses: HarithaVattikuti/setup-dotnet@testarch
+        with:
+          dotnet-version: '10.0.x'
+          architecture: 'x86'
+
+      # ── This is the real test ──
+      # Create a simple console app and build it for x86
+      - name: Create and build a console app
+        run: |
+          dotnet new console -n TestApp -o TestApp
+          dotnet build TestApp --runtime win-x86 --self-contained false
+
+      # Run it and check what architecture the process actually runs as
+      - name: Run and verify architecture is x86
+        run: |
+          $output = dotnet run --project TestApp --runtime win-x86
+          Write-Host "App output: $output"
+
+      # ── Now simulate what happens when another tool reads DOTNET_INSTALL_DIR ──
+      # This is the equivalent of a second setup-dotnet or manual dotnet-install.ps1 call
+      - name: Install another .NET version using dotnet-install.ps1 (no explicit -InstallDir)
+        run: |
+          Write-Host "DOTNET_INSTALL_DIR is: $env:DOTNET_INSTALL_DIR"
+          Write-Host "DOTNET_ROOT is: $env:DOTNET_ROOT"
+          Write-Host ""
+          Write-Host "Installing .NET 9.0 runtime via dotnet-install.ps1 (uses DOTNET_INSTALL_DIR as default)..."
+          & 'D:\a\_actions\HarithaVattikuti\setup-dotnet\testarch\externals\install-dotnet.ps1' -Runtime dotnet -Channel 9.0
+
+      # Now check: where did it actually install?
+      - name: Verify where .NET 9.0 was installed
+        run: |
+          $x86Path = "$env:USERPROFILE\.dotnet\x86\shared\Microsoft.NETCore.App"
+          $defaultPath = "$env:USERPROFILE\.dotnet\shared\Microsoft.NETCore.App"
+
+          Write-Host "Checking x86 path: $x86Path"
+          if (Test-Path $x86Path) {
+            Write-Host "  Contents:" 
+            Get-ChildItem $x86Path | ForEach-Object { Write-Host "    $_" }
+          }
+
+          Write-Host ""
+          Write-Host "Checking default (x64) path: $defaultPath"
+          if (Test-Path $defaultPath) {
+            Write-Host "  Contents:"
+            Get-ChildItem $defaultPath | ForEach-Object { Write-Host "    $_" }
+          }
+
+          Write-Host ""
+          # Check if 9.0 ended up in the WRONG place
+          $wrongPlace = Get-ChildItem $defaultPath -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "9.0.*" }
+          $rightPlace = Get-ChildItem $x86Path -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "9.0.*" }
+
+          if ($wrongPlace -and -not $rightPlace) {
+            Write-Host "❌ BUG: .NET 9.0 was installed to the x64 default path, NOT the x86 path!"
+            Write-Host "   This happened because DOTNET_INSTALL_DIR ($env:DOTNET_INSTALL_DIR) was stale."
+            exit 1
+          } elseif ($rightPlace) {
+            Write-Host "✅ .NET 9.0 was correctly installed to the x86 path."
+          }
