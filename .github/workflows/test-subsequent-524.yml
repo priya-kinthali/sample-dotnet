@@ -26,6 +26,8 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           architecture: 'x64'
+          cache: true
+          cache-dependency-path: src/Library/packages.lock.json
       - run: dotnet --info
       - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Linux/macOS)
         if: runner.os == 'Linux' || runner.os == 'macOS'
@@ -38,6 +40,8 @@ jobs:
         uses: HarithaVattikuti/setup-dotnet@testarch
         with:
           dotnet-version: '10.0.102'
+          cache: true
+          cache-dependency-path: src/Library/packages.lock.json
           # architecture: 'x86'
       - run: dotnet --info
       # - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
