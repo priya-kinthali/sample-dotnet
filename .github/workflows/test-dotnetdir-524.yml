@@ -20,7 +20,7 @@ jobs:
         with:
           dotnet-version: '10.0.x'
           architecture: 'x86'
-
+      - run: dotnet --info
       # ── This is the real test ──
       # Create a simple console app and build it for x86
       - name: Create and build a console app
