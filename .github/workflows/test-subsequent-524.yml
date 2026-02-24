@@ -21,8 +21,8 @@ jobs:
         run: echo "DOTNET_INSTALL_DIR=${{ runner.temp }}/.dotnet" >> $GITHUB_ENV
       - name: Install .NET x64
         # uses: priya-kinthali/setup-dotnet@add-architecture-support
-        uses: priya-kinthali/setup-dotnet@test-524
-        # uses: HarithaVattikuti/setup-dotnet@testarch
+        # uses: priya-kinthali/setup-dotnet@test-524
+        uses: HarithaVattikuti/setup-dotnet@testarch
         with:
           dotnet-version: '10.0.x'
           architecture: 'x64'
@@ -34,8 +34,8 @@ jobs:
           echo "DOTNET_ROOT=$DOTNET_ROOT"
       - name: Install .NET arm64
         # uses: priya-kinthali/setup-dotnet@add-architecture-support
-        uses: priya-kinthali/setup-dotnet@test-524
-        # uses: HarithaVattikuti/setup-dotnet@testarch
+        # uses: priya-kinthali/setup-dotnet@test-524
+        uses: HarithaVattikuti/setup-dotnet@testarch
         with:
           dotnet-version: '10.0.102'
           # architecture: 'x86'
