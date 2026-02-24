@@ -8,28 +8,31 @@ on:
 
 jobs:
   cross-arch-mismatch:
-    runs-on: windows-latest
+    # runs-on: windows-latest
+    runs-on: macos-latest
+
     name: "test"
     steps:
+      # - name: Set DOTNET_INSTALL_DIR
+      #   run: |
+      #     "DOTNET_INSTALL_DIR=$env:USERPROFILE\.dotnet" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Set DOTNET_INSTALL_DIR
-        run: |
-          "DOTNET_INSTALL_DIR=$env:USERPROFILE\.dotnet" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Install .NET x86
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: echo "DOTNET_INSTALL_DIR=${{ runner.temp }}/.dotnet" >> $GITHUB_ENV
+      - name: Install .NET x64
         # uses: priya-kinthali/setup-dotnet@add-architecture-support
         uses: priya-kinthali/setup-dotnet@test-524
         # uses: HarithaVattikuti/setup-dotnet@testarch
         with:
           dotnet-version: '10.0.x'
-          architecture: 'x86'
+          architecture: 'x64'
       - run: dotnet --info
-      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
+      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
         run: |
-          Write-Host "DOTNET_INSTALL_DIR=$env:DOTNET_INSTALL_DIR"
-          Write-Host "DOTNET_ROOT=$env:DOTNET_ROOT"
-      - name: Install .NET x64
+          echo "DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR"
+          echo "DOTNET_ROOT=$DOTNET_ROOT"
+      - name: Install .NET arm64
         # uses: priya-kinthali/setup-dotnet@add-architecture-support
         uses: priya-kinthali/setup-dotnet@test-524
         # uses: HarithaVattikuti/setup-dotnet@testarch
@@ -37,9 +40,14 @@ jobs:
           dotnet-version: '10.0.102'
           # architecture: 'x86'
       - run: dotnet --info
-      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
+      # - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
+        # if: runner.os == 'Windows'
+        # shell: pwsh
+        # run: |
+        #   Write-Host "DOTNET_INSTALL_DIR=$env:DOTNET_INSTALL_DIR"
+        #   Write-Host "DOTNET_ROOT=$env:DOTNET_ROOT"
+      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
         run: |
-          Write-Host "DOTNET_INSTALL_DIR=$env:DOTNET_INSTALL_DIR"
-          Write-Host "DOTNET_ROOT=$env:DOTNET_ROOT"
+          echo "DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR"
+          echo "DOTNET_ROOT=$DOTNET_ROOT"
