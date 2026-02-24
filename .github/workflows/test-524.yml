@@ -37,6 +37,18 @@ jobs:
         #  dotnet-version: | 
         #           9.0.308
         #           10.0.101     
+      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: |
+          echo "DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR"
+          echo "DOTNET_ROOT=$DOTNET_ROOT"
+
+      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host "DOTNET_INSTALL_DIR=$env:DOTNET_INSTALL_DIR"
+          Write-Host "DOTNET_ROOT=$env:DOTNET_ROOT"
       - run: dotnet --info
       - run: dotnet restore --locked-mode
   
@@ -72,5 +84,17 @@ jobs:
         #  dotnet-version: | 
         #           9.0.308
         #           10.0.101     
+      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Linux/macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: |
+          echo "DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR"
+          echo "DOTNET_ROOT=$DOTNET_ROOT"
+
+      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Write-Host "DOTNET_INSTALL_DIR=$env:DOTNET_INSTALL_DIR"
+          Write-Host "DOTNET_ROOT=$env:DOTNET_ROOT"
       - run: dotnet --info
       - run: dotnet restore --locked-mode
