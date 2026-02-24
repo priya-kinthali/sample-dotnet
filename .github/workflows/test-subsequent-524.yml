@@ -30,7 +30,7 @@ jobs:
       - name: Install .NET x86
         uses: priya-kinthali/setup-dotnet@test-524
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: '10.0.102'
           # architecture: 'x86'
       - run: dotnet --info
       - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
