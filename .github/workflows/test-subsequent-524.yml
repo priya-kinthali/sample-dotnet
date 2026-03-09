@@ -1,9 +1,9 @@
 name: Real impact of DOTNET_INSTALL_DIR mismatch cache
 
 on:
-  push:
-    branches:
-      - test-588
+  # push:
+  #   branches:
+  #     - test-588
   workflow_dispatch:
 
 jobs:

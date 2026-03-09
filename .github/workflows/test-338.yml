@@ -1,0 +1,39 @@
+name: test 338
+
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      # Step 1: Install .NET x86 first using the new architecture input
+      - name: Setup .NET 8.0 x86
+        uses: actions/setup-dotnet@main
+        with:
+          dotnet-version: 8.0.x
+          architecture: x86
+
+      # Step 2: Capture the DOTNET_ROOT (which now points to the x86 install dir)
+      #         and save it as DOTNET_ROOT(x86) for downstream tools
+      - name: Set DOTNET_ROOT(x86)
+        shell: pwsh
+        run: |
+          echo "DOTNET_ROOT(x86)=${env:DOTNET_ROOT}" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      # Step 3: Install .NET x64 (default arch) — this will overwrite DOTNET_ROOT to the x64 path
+      - name: Setup .NET 8.0 x64
+        uses: actions/setup-dotnet@main
+        with:
+          dotnet-version: 8.0.x
+
+      # Now the environment has:
+      #   DOTNET_ROOT       = C:\Program Files\dotnet        (x64)
+      #   DOTNET_ROOT(x86)  = C:\Program Files\dotnet\x86    (x86)
+      #   Both are on PATH
+
+      - name: Run x86 tests
+        run: dotnet test --arch x86
