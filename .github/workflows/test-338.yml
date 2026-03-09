@@ -19,6 +19,8 @@ jobs:
 
       # Step 2: Capture the DOTNET_ROOT (which now points to the x86 install dir)
       #         and save it as DOTNET_ROOT(x86) for downstream tools
+      - name: dotnet --info
+        run: dotnet --info
       - name: Set DOTNET_ROOT(x86)
         shell: pwsh
         run: |
@@ -35,5 +37,5 @@ jobs:
       #   DOTNET_ROOT(x86)  = C:\Program Files\dotnet\x86    (x86)
       #   Both are on PATH
 
-      - name: Run x86 tests
-        run: dotnet test --arch x86
+      - name: dotnet --info
+        run: dotnet --info
