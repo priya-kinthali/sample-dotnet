@@ -23,10 +23,11 @@ jobs:
       #   if: runner.os == 'Windows'
       #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
       #   shell: pwsh
-      # - uses: actions/setup-dotnet@v5
-      - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
+      - uses: actions/setup-dotnet@v5
+      # - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
         with:
-         dotnet-version: 'latest'
-         dotnet-channel: sts
+          dotnet-version: '9'
+        #  dotnet-version: 'latest'
+        #  dotnet-channel: sts
       - run: dotnet --info
 
