@@ -11,20 +11,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-            os: [macos-latest, ubuntu-latest, windows-latest]
+            os: [macos-latest, ubuntu-latest, windows-latest, windows-11-arm, macos-15-intel, ubuntu-24.04-arm]
             
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Clear dotnet cache
-        if: runner.os != 'Windows'
-        run: rm -rf $HOME/.dotnet
-      - name: Clear dotnet cache (Windows)
-        if: runner.os == 'Windows'
-        run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
-        shell: pwsh
+      # - name: Clear dotnet cache
+      #   if: runner.os != 'Windows'
+      #   run: rm -rf $HOME/.dotnet
+      # - name: Clear dotnet cache (Windows)
+      #   if: runner.os == 'Windows'
+      #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
+      #   shell: pwsh
       - uses: actions/setup-dotnet@v5
+      # - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
         with:
-         dotnet-version: '11'
+         dotnet-version: '10'
       - run: dotnet --info
 

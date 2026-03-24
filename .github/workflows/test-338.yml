@@ -1,9 +1,9 @@
 name: test 338
 
 on:
-  push:
-    branches:
-      - test-588
+  # push:
+  #   branches:
+  #     - test-588
   workflow_dispatch:
 
 jobs:
