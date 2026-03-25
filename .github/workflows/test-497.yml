@@ -1,4 +1,4 @@
-name: check wget
+name: check dotnet latest
 on:
   push:
     branches:
