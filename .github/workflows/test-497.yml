@@ -33,15 +33,9 @@ jobs:
       #     dotnet-version: 'latest'
       #     dotnet-channel: lts
       #     # dotnet-quality: 'ga'
-      - name: Install .NET SDK 11 (Linux)
-        if: runner.os == 'Linux'
-        shell: bash
+      - name: Install .NET 6 on x64
         run: |
-          set -euo pipefail
-          curl -fsSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
-          chmod +x dotnet-install.sh
-          ./dotnet-install.sh --version 11.0.100 --install-dir "$HOME/.dotnet"
-          echo "$HOME/.dotnet" >> "$GITHUB_PATH"
-          echo "DOTNET_ROOT=$HOME/.dotnet" >> "$GITHUB_ENV"
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --runtime dotnet --version 11.0.0-preview.2 --architecture x64 --install-dir $HOME/.dotnet-x64
+
       - run: dotnet --info
 
