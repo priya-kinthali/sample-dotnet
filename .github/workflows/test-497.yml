@@ -30,7 +30,7 @@ jobs:
       # - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
         with:
           # dotnet-version: '10'
-          global-json-file: 'csharp/global.jsonn'
+          global-json-file: 'csharp/global.json'
           # dotnet-version: latest
           # dotnet-channel: lts
           # architecture : ${{ matrix.arch }}
