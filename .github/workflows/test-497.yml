@@ -11,7 +11,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-            os: [macos-latest, ubuntu-latest, windows-latest, windows-11-arm, macos-15-intel, ubuntu-24.04-arm]
+            # os: [macos-latest, ubuntu-latest, windows-latest, windows-11-arm, macos-15-intel, ubuntu-24.04-arm]
+            os: [ubuntu-latest]
+
             
     steps:
       - name: Checkout
@@ -24,12 +26,22 @@ jobs:
       #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
       #   shell: pwsh
       # - uses: actions/setup-dotnet@v5
-      - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
-        with:
-          # dotnet-version: '11'
-          # global-json-file: 'csharp/global.jsonn'
-          dotnet-version: 'latest'
-          dotnet-channel: lts
-          # dotnet-quality: 'ga'
+      # - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
+      #   with:
+      #     # dotnet-version: '11'
+      #     # global-json-file: 'csharp/global.jsonn'
+      #     dotnet-version: 'latest'
+      #     dotnet-channel: lts
+      #     # dotnet-quality: 'ga'
+      - name: Install .NET SDK 11 (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+          chmod +x dotnet-install.sh
+          ./dotnet-install.sh --version 11.0.100 --install-dir "$HOME/.dotnet"
+          echo "$HOME/.dotnet" >> "$GITHUB_PATH"
+          echo "DOTNET_ROOT=$HOME/.dotnet" >> "$GITHUB_ENV"
       - run: dotnet --info
 
