@@ -35,7 +35,7 @@ jobs:
       #     # dotnet-quality: 'ga'
       - name: Install .NET 6 on x64
         run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --runtime dotnet --version 11.0.0-preview.2 --architecture x64 --install-dir $HOME/.dotnet-x64
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --runtime dotnet --version 11.0.0-preview.2.26159.112 --architecture x64 --install-dir $HOME/.dotnet-x64
 
       - run: dotnet --info
 
