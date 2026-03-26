@@ -30,8 +30,11 @@ jobs:
         with:
           # dotnet-version: '11'
           # global-json-file: 'csharp/global.jsonn'
-          dotnet-version: 'invalid'
+          dotnet-version: |
+            latest
+            9.0.x
           dotnet-channel: lts
+          # architecture: arm64
           # dotnet-quality: 'ga'
 
       - run: dotnet --info
