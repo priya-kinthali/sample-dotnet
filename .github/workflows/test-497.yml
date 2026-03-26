@@ -26,16 +26,13 @@ jobs:
       #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
       #   shell: pwsh
       # - uses: actions/setup-dotnet@v5
-      # - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
-      #   with:
-      #     # dotnet-version: '11'
-      #     # global-json-file: 'csharp/global.jsonn'
-      #     dotnet-version: 'latest'
-      #     dotnet-channel: lts
-      #     # dotnet-quality: 'ga'
-      - name: Install .NET 6 on x64
-        run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --runtime dotnet --version 11.0.0-preview.2.26159.112 --architecture x64 --install-dir $HOME/.dotnet-x64
+      - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
+        with:
+          # dotnet-version: '11'
+          # global-json-file: 'csharp/global.jsonn'
+          dotnet-version: 'invalid'
+          dotnet-channel: lts
+          # dotnet-quality: 'ga'
 
       - run: dotnet --info
 
