@@ -26,15 +26,19 @@ jobs:
       #   if: runner.os == 'Windows'
       #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
       #   shell: pwsh
-      - uses: actions/setup-dotnet@v5
-      # - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
+      # - uses: actions/setup-dotnet@v5
+      - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
         with:
           # dotnet-version: '10'
-          global-json-file: 'csharp/global.json'
-          # dotnet-version: latest
+          # global-json-file: 'csharp/global.json'
+          dotnet-version: latest
+          cache: true
+          cache-dependency-path: src/Library/packages.lock.json
           # dotnet-channel: lts
           # architecture : ${{ matrix.arch }}
           # dotnet-quality: 'ga'
 
       - run: dotnet --info
+      - run: dotnet restore --locked-mode
+  
 
