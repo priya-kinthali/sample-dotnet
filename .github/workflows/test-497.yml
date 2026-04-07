@@ -19,13 +19,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - name: Clear dotnet cache
-      #   if: runner.os != 'Windows'
-      #   run: rm -rf $HOME/.dotnet
-      # - name: Clear dotnet cache (Windows)
-      #   if: runner.os == 'Windows'
-      #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
-      #   shell: pwsh
+      - name: Clear dotnet cache
+        if: runner.os != 'Windows'
+        run: rm -rf $HOME/.dotnet
+      - name: Clear dotnet cache (Windows)
+        if: runner.os == 'Windows'
+        run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
+        shell: pwsh
       
       # - name: Set DOTNET_INSTALL_DIR
       #   if: runner.os == 'Linux' || runner.os == 'macOS'
