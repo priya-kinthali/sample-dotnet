@@ -44,7 +44,7 @@ jobs:
           dotnet-version: latest           
           # cache: true
           # cache-dependency-path: src/Library/packages.lock.json
-          dotnet-channel: 'lts'
+          # dotnet-channel: 'lts'
           # architecture : ${{ matrix.arch }}
           dotnet-quality: 'preview'
 
