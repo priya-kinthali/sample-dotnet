@@ -46,7 +46,7 @@ jobs:
           # cache-dependency-path: src/Library/packages.lock.json
           dotnet-channel: '9.0'
           # architecture : ${{ matrix.arch }}
-          dotnet-quality: 'ga'
+          dotnet-quality: 'preview'
 
       # - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Linux/macOS)
       #   if: runner.os == 'Linux' || runner.os == 'macOS'
