@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  setupDotnet_main:
+  setupdotnet_main:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -21,7 +21,7 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 
-  setupDotnet_pr:
+  setupdotnet_pr:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -32,5 +32,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - uses: akoeplinger/setup-dotnet@fix-releases
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+  setupdotnet_mybranch:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest, windows-11-arm, macos-15-intel, ubuntu-24.04-arm]
+        dotnet-version: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - uses: priya-kinthali/setup-dotnet@test-560
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
