@@ -1,4 +1,4 @@
-name: check wget
+name: check dotnet latest
 on:
   push:
     branches:
@@ -11,7 +11,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-            os: [macos-latest, ubuntu-latest, windows-latest, windows-11-arm, macos-15-intel, ubuntu-24.04-arm]
+            # os: [macos-latest, ubuntu-latest, windows-latest, windows-11-arm, macos-15-intel, ubuntu-24.04-arm]
+            os: [ubuntu-latest]
+
             
     steps:
       - name: Checkout
@@ -23,11 +25,16 @@ jobs:
       #   if: runner.os == 'Windows'
       #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
       #   shell: pwsh
-      - uses: actions/setup-dotnet@v5
-      # - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
+      # - uses: actions/setup-dotnet@v5
+      - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
         with:
           # dotnet-version: '11'
-          dotnet-version: 'invalid'
-          # dotnet-channel: sts
-          dotnet-quality: 'xyz'
+          # global-json-file: 'csharp/global.jsonn'
+          dotnet-version: |
+            latest
+            9.0.x
+          dotnet-channel: lts
+          # architecture: arm64
+          # dotnet-quality: 'ga'
+
       - run: dotnet --info
