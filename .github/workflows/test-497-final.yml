@@ -44,7 +44,7 @@ jobs:
           dotnet-version: latest           
           # cache: true
           # cache-dependency-path: src/Library/packages.lock.json
-          dotnet-channel: '9.0'
+          dotnet-channel: 'lts'
           # architecture : ${{ matrix.arch }}
           dotnet-quality: 'preview'
 
@@ -63,4 +63,3 @@ jobs:
       - run: dotnet --info
       - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.416
       # - run: dotnet restore --locked-mode
-  
