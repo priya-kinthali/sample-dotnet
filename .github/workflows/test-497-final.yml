@@ -27,7 +27,7 @@ jobs:
       - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
         with:
           # dotnet-version: '11'
-          dotnet-version: 'latest'
+          dotnet-version: 'invalid'
           dotnet-channel: sts
           dotnet-quality: 'validated'
       - run: dotnet --info
