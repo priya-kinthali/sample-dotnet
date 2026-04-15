@@ -12,7 +12,8 @@ jobs:
       fail-fast: false
       matrix:
             # os: [macos-latest, ubuntu-latest, windows-latest, windows-11-arm, macos-15-intel, ubuntu-24.04-arm]
-            os: [ubuntu-latest]
+            os: [ubuntu-latest, windows-latest, macos-latest]
+            arch: [x64, x86, arm64]   
 
             
     steps:
@@ -30,11 +31,9 @@ jobs:
         with:
           # dotnet-version: '11'
           # global-json-file: 'csharp/global.jsonn'
-          dotnet-version: |
-            latest
-            9.0.x
-          dotnet-channel: lts
-          # architecture: arm64
+          dotnet-version: latest
+          # dotnet-channel: lts
+          architecture : ${{ matrix.arch }}
           # dotnet-quality: 'ga'
 
       - run: dotnet --info
