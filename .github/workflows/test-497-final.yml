@@ -26,16 +26,17 @@ jobs:
       #   if: runner.os == 'Windows'
       #   run: Remove-Item -Recurse -Force $env:USERPROFILE\.dotnet
       #   shell: pwsh
-      # - uses: actions/setup-dotnet@v5
-      - name: Set DOTNET_INSTALL_DIR
-        if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: echo "DOTNET_INSTALL_DIR=${{ runner.temp }}/.dotnet" >> $GITHUB_ENV
-      - name: Set DOTNET_INSTALL_DIR
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          "DOTNET_INSTALL_DIR=$env:USERPROFILE\.dotnet" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append 
+      
+      # - name: Set DOTNET_INSTALL_DIR
+      #   if: runner.os == 'Linux' || runner.os == 'macOS'
+      #   run: echo "DOTNET_INSTALL_DIR=${{ runner.temp }}/.dotnet" >> $GITHUB_ENV
+      # - name: Set DOTNET_INSTALL_DIR
+      #   if: runner.os == 'Windows'
+      #   shell: pwsh
+      #   run: |
+      #     "DOTNET_INSTALL_DIR=$env:USERPROFILE\.dotnet" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append 
       - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
+      # - uses: actions/setup-dotnet@v5
         id: stepid
         with:
           # dotnet-version: '10'
@@ -43,21 +44,22 @@ jobs:
           dotnet-version: latest           
           # cache: true
           # cache-dependency-path: src/Library/packages.lock.json
-          # dotnet-channel: lts
+          dotnet-channel: 8.0.1xx
           # architecture : ${{ matrix.arch }}
           # dotnet-quality: 'ga'
 
-      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Linux/macOS)
-        if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: |
-          echo "DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR"
-          echo "DOTNET_ROOT=$DOTNET_ROOT"
-      - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          Write-Host "DOTNET_INSTALL_DIR=$env:DOTNET_INSTALL_DIR"
-          Write-Host "DOTNET_ROOT=$env:DOTNET_ROOT"
+      # - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Linux/macOS)
+      #   if: runner.os == 'Linux' || runner.os == 'macOS'
+      #   run: |
+      #     echo "DOTNET_INSTALL_DIR=$DOTNET_INSTALL_DIR"
+      #     echo "DOTNET_ROOT=$DOTNET_ROOT"
+
+      # - name: Echo DOTNET_INSTALL_DIR and DOTNET_ROOT (Windows)
+      #   if: runner.os == 'Windows'
+      #   shell: pwsh
+      #   run: |
+      #     Write-Host "DOTNET_INSTALL_DIR=$env:DOTNET_INSTALL_DIR"
+      #     Write-Host "DOTNET_ROOT=$env:DOTNET_ROOT"
       - run: dotnet --info
       - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.416
       # - run: dotnet restore --locked-mode
