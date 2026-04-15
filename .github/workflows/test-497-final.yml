@@ -39,9 +39,9 @@ jobs:
       # - uses: actions/setup-dotnet@v5
         id: stepid
         with:
-          # dotnet-version: '10'
+          dotnet-version: '8.0'
           # global-json-file: 'csharp/global.json'
-          dotnet-version: latest           
+          # dotnet-version: latest           
           # cache: true
           # cache-dependency-path: src/Library/packages.lock.json
           dotnet-channel: '9.0'
@@ -63,3 +63,4 @@ jobs:
       - run: dotnet --info
       - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.416
       # - run: dotnet restore --locked-mode
+  
