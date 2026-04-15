@@ -27,4 +27,5 @@ jobs:
       - uses: mahabaleshwars/setup-dotnet@feature/497-dotnet-version-latest-keyword
         with:
          dotnet-version: 'latest'
+         dotnet-channel: sts
       - run: dotnet --info
