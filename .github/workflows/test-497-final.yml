@@ -29,5 +29,5 @@ jobs:
           # dotnet-version: '11'
           dotnet-version: 'invalid'
           # dotnet-channel: sts
-          dotnet-quality: 'validated'
+          dotnet-quality: 'xyz'
       - run: dotnet --info
