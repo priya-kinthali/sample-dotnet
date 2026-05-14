@@ -1,0 +1,109 @@
+name: check dotnet latest
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  test-latestMajor:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-24.04-arm, windows-11-arm, macos-15-intel]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json
+        shell: bash
+        run: |
+          echo '{"sdk":{"version":"3.1.0","rollForward":"latestMajor"}}' > global.json
+      - name: Setup .NET (latestMajor)
+        uses: js6pak/setup-dotnet@feat/support-rollForward
+        with:
+          global-json-file: global.json
+      - name: Verify dotnet
+        run: dotnet --version
+
+  test-latestMinor:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-24.04-arm, windows-11-arm, macos-15-intel]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json
+        shell: bash
+        run: |
+          echo '{"sdk":{"version":"7.0.0","rollForward":"latestMinor"}}' > global.json
+      - name: Setup .NET (latestMinor)
+        uses: js6pak/setup-dotnet@feat/support-rollForward
+        with:
+          global-json-file: global.json
+      - name: Verify dotnet
+        run: dotnet --version
+
+  test-latestFeature:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-24.04-arm, windows-11-arm, macos-15-intel]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json
+        shell: bash
+        run: |
+          echo '{"sdk":{"version":"6.0.100","rollForward":"latestFeature"}}' > global.json
+      - name: Setup .NET (latestFeature)
+        uses: js6pak/setup-dotnet@feat/support-rollForward
+        with:
+          global-json-file: global.json
+      - name: Verify dotnet
+        run: dotnet --version
+
+  test-latestPatch:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-24.04-arm, windows-11-arm, macos-15-intel]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json
+        shell: bash
+        run: |
+          echo '{"sdk":{"version":"8.0.100","rollForward":"latestPatch"}}' > global.json
+      - name: Setup .NET (latestPatch)
+        uses: js6pak/setup-dotnet@feat/support-rollForward
+        with:
+          global-json-file: global.json
+      - name: Verify dotnet
+        run: dotnet --version
+
+  test-no-rollForward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (no rollForward - exact version)
+        shell: bash
+        run: |
+          echo '{"sdk":{"version":"8.0.300"}}' > global.json
+      - name: Setup .NET (exact)
+        uses: js6pak/setup-dotnet@feat/support-rollForward
+        with:
+          global-json-file: global.json
+      - name: Verify dotnet
+        run: dotnet --version
+
+  test-dotnet-version-input:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup .NET with version input (should still work)
+        uses: js6pak/setup-dotnet@feat/support-rollForward
+        with:
+          dotnet-version: '8.0.x'
+      - name: Verify dotnet
+        run: dotnet --version
