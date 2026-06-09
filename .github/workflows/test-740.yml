@@ -22,6 +22,7 @@ jobs:
         shell: pwsh
         run: |
           $v = dotnet --version
+          Write-Host "Installed SDK version: $v"
           if ($v -notmatch "^10\.0\.1\d{2}") { throw "Expected 10.0.1xx, got $v" }
 
   test-rollforward-latestfeature:
@@ -39,6 +40,7 @@ jobs:
         shell: pwsh
         run: |
           $v = dotnet --version
+          Write-Host "Installed SDK version: $v"
           if ($v -notmatch "^10\.0\.\d+") { throw "Expected 10.0.x, got $v" }
 
   test-rollforward-latestminor:
@@ -56,6 +58,7 @@ jobs:
         shell: pwsh
         run: |
           $v = dotnet --version
+          Write-Host "Installed SDK version: $v"
           if ($v -notmatch "^8\.") { throw "Expected 8.x, got $v" }
 
   test-rollforward-latestmajor:
@@ -73,6 +76,7 @@ jobs:
         shell: pwsh
         run: |
           $v = dotnet --version
+          Write-Host "Installed SDK version: $v"
           if ($v -match "^8\.") { throw "Expected newer than 8.x, got $v" }
 
   # ─── PRERELEASE BYPASS: rollForward is ignored ───────────────────────
@@ -91,6 +95,7 @@ jobs:
         shell: pwsh
         run: |
           $v = dotnet --version
+          Write-Host "Installed SDK version: $v"
           if ($v -ne "10.0.100-preview.7.25380.108") { throw "Expected exact prerelease, got $v" }
 
   # ─── EDGE CASE: No rollForward, version passes through unchanged ────
@@ -109,6 +114,7 @@ jobs:
         shell: pwsh
         run: |
           $v = dotnet --version
+          Write-Host "Installed SDK version: $v"
           if ($v -ne "10.0.101") { throw "Expected 10.0.101, got $v" }
 
   # ─── EDGE CASE: Higher patch numbers (multi-digit feature band) ──────
@@ -127,6 +133,7 @@ jobs:
         shell: pwsh
         run: |
           $v = dotnet --version
+          Write-Host "Installed SDK version: $v"
           if ($v -notmatch "^9\.0\.") { throw "Expected 9.0.x, got $v" }
 
   # ─── global.json with JSON5 comments ─────────────────────
@@ -145,6 +152,7 @@ jobs:
         shell: pwsh
         run: |
           $v = dotnet --version
+          Write-Host "Installed SDK version: $v"
           if ($v -notmatch "^10\.0\.") { throw "Expected 10.0.x, got $v" }
 
   # ─── ERROR CASES: Should fail with clear message ─────────────────────
@@ -231,5 +239,6 @@ jobs:
         shell: pwsh
         run: |
           $list = dotnet --list-sdks
+          Write-Host "Installed SDKs:`n$list"
           if ($list -notmatch "9\.0") { throw "Missing 9.0 SDK" }
           if ($list -notmatch "10\.0") { throw "Missing 10.0 SDK" }
