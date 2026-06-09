@@ -1,0 +1,235 @@
+name: Test global.json sdk.version validation
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  # ─── HAPPY PATH: All valid rollForward combinations ──────────────────
+  test-rollforward-latestpatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (latestPatch)
+        run: |
+          echo '{"sdk":{"version":"10.0.100","rollForward":"latestPatch"}}' > global.json
+      - name: Setup dotnet
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+      - name: Verify SDK is in 10.0.1xx band
+        shell: pwsh
+        run: |
+          $v = dotnet --version
+          if ($v -notmatch "^10\.0\.1\d{2}") { throw "Expected 10.0.1xx, got $v" }
+
+  test-rollforward-latestfeature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (latestFeature)
+        run: |
+          echo '{"sdk":{"version":"10.0.100","rollForward":"latestFeature"}}' > global.json
+      - name: Setup dotnet
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+      - name: Verify SDK is 10.0.x (any feature band)
+        shell: pwsh
+        run: |
+          $v = dotnet --version
+          if ($v -notmatch "^10\.0\.\d+") { throw "Expected 10.0.x, got $v" }
+
+  test-rollforward-latestminor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (latestMinor)
+        run: |
+          echo '{"sdk":{"version":"8.0.100","rollForward":"latestMinor"}}' > global.json
+      - name: Setup dotnet
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+      - name: Verify SDK is 8.x
+        shell: pwsh
+        run: |
+          $v = dotnet --version
+          if ($v -notmatch "^8\.") { throw "Expected 8.x, got $v" }
+
+  test-rollforward-latestmajor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (latestMajor)
+        run: |
+          echo '{"sdk":{"version":"8.0.100","rollForward":"latestMajor"}}' > global.json
+      - name: Setup dotnet
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+      - name: Verify a version newer than 8 is installed
+        shell: pwsh
+        run: |
+          $v = dotnet --version
+          if ($v -match "^8\.") { throw "Expected newer than 8.x, got $v" }
+
+  # ─── PRERELEASE BYPASS: rollForward is ignored ───────────────────────
+  test-prerelease-bypass:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (prerelease + rollForward)
+        run: |
+          echo '{"sdk":{"version":"10.0.100-preview.7.25380.108","rollForward":"latestPatch"}}' > global.json
+      - name: Setup dotnet
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+      - name: Verify exact prerelease version installed
+        shell: pwsh
+        run: |
+          $v = dotnet --version
+          if ($v -ne "10.0.100-preview.7.25380.108") { throw "Expected exact prerelease, got $v" }
+
+  # ─── EDGE CASE: No rollForward, version passes through unchanged ────
+  test-no-rollforward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (no rollForward)
+        run: |
+          echo '{"sdk":{"version":"10.0.101"}}' > global.json
+      - name: Setup dotnet
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+      - name: Verify exact version
+        shell: pwsh
+        run: |
+          $v = dotnet --version
+          if ($v -ne "10.0.101") { throw "Expected 10.0.101, got $v" }
+
+  # ─── EDGE CASE: Higher patch numbers (multi-digit feature band) ──────
+  test-high-patch-number:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (version 9.0.308)
+        run: |
+          echo '{"sdk":{"version":"9.0.308","rollForward":"latestFeature"}}' > global.json
+      - name: Setup dotnet
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+      - name: Verify SDK is 9.0.x
+        shell: pwsh
+        run: |
+          $v = dotnet --version
+          if ($v -notmatch "^9\.0\.") { throw "Expected 9.0.x, got $v" }
+
+  # ─── global.json with JSON5 comments ─────────────────────
+  test-global-json-with-comments:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json with comments
+        run: |
+          echo '/* comment */ {"sdk":{"version":"10.0.101","rollForward":"latestFeature"}} // trailing' > global.json
+      - name: Setup dotnet
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+      - name: Verify SDK is 10.0.x
+        shell: pwsh
+        run: |
+          $v = dotnet --version
+          if ($v -notmatch "^10\.0\.") { throw "Expected 10.0.x, got $v" }
+
+  # ─── ERROR CASES: Should fail with clear message ─────────────────────
+  test-invalid-short-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (invalid version 3.1.0)
+        run: |
+          echo '{"sdk":{"version":"3.1.0","rollForward":"latestMajor"}}' > global.json
+      - name: Setup dotnet (expect failure)
+        id: setup
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+        continue-on-error: true
+      - name: Verify failure with descriptive error
+        if: steps.setup.outcome == 'failure'
+        run: echo "✅ Correctly rejected invalid version 3.1.0"
+      - name: Fail if unexpectedly succeeded
+        if: steps.setup.outcome == 'success'
+        run: |
+          echo "❌ Should have failed for version 3.1.0 with rollForward"
+          exit 1
+
+  test-invalid-incomplete-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (incomplete version 8.0)
+        run: |
+          echo '{"sdk":{"version":"8.0","rollForward":"latestPatch"}}' > global.json
+      - name: Setup dotnet (expect failure)
+        id: setup
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+        continue-on-error: true
+      - name: Verify failure
+        if: steps.setup.outcome == 'failure'
+        run: echo "✅ Correctly rejected incomplete version 8.0"
+      - name: Fail if unexpectedly succeeded
+        if: steps.setup.outcome == 'success'
+        run: |
+          echo "❌ Should have failed for version 8.0 with rollForward"
+          exit 1
+
+  test-invalid-zero-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json (patch starts with 0)
+        run: |
+          echo '{"sdk":{"version":"8.0.099","rollForward":"latestPatch"}}' > global.json
+      - name: Setup dotnet (expect failure)
+        id: setup
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          global-json-file: global.json
+        continue-on-error: true
+      - name: Verify failure
+        if: steps.setup.outcome == 'failure'
+        run: echo "✅ Correctly rejected version with patch starting with 0"
+      - name: Fail if unexpectedly succeeded
+        if: steps.setup.outcome == 'success'
+        run: |
+          echo "❌ Should have failed for version 8.0.099 with rollForward"
+          exit 1
+
+  # ─── COMBINED: global-json-file + dotnet-version input together ──────
+  test-global-json-plus-version-input:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Write global.json
+        run: |
+          echo '{"sdk":{"version":"9.0.308","rollForward":"latestFeature"}}' > global.json
+      - name: Setup dotnet with both inputs
+        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        with:
+          dotnet-version: '10.0'
+          global-json-file: global.json
+      - name: Verify both SDKs available
+        shell: pwsh
+        run: |
+          $list = dotnet --list-sdks
+          if ($list -notmatch "9\.0") { throw "Missing 9.0 SDK" }
+          if ($list -notmatch "10\.0") { throw "Missing 10.0 SDK" }
