@@ -230,9 +230,10 @@ jobs:
       - uses: actions/checkout@v6
       - name: Write global.json
         run: |
-          echo '{"sdk":{"version":"9.0.308","rollForward":"latestFeature"}}' > global.json
+          echo '{"sdk":{"version":"9.0.308"}}' > global.json
       - name: Setup dotnet with both inputs
-        uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        # uses: priyagupta108/setup-dotnet@validate-global-json-sdk-version
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0'
           global-json-file: global.json
