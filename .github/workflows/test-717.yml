@@ -1,0 +1,120 @@
+name: Test global.json sdk.version validation
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  # ─── 1. Baseline: regular CSC error (worked before the PR too) ───────
+  baseline-csc-error:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Emit standard CSC error
+        run: |
+          echo 'Program.cs(10,79): error CS1002: ; expected [/repo/sample.csproj]'
+
+  # ─── 2. New: column number is captured ───────────────────────────────
+  column-captured:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Emit error with line+column
+        run: |
+          echo "S:\\src\\ExpressionShredder.cs(33,7): error CS1003: Syntax error, ',' expected [S:\\src\\Microsoft.Build.csproj]"
+
+  # ─── 3. New: dotnet format style (non-numeric code) ──────────────────
+  dotnet-format-style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Emit dotnet format WHITESPACE error
+        run: |
+          echo 'C:\actions-runner\_work\Some\Folder\SomeFile.cs(222,8): error WHITESPACE: Fix whitespace formatting. Delete 1 characters. [C:\actions-runner\_work\Some\Folder\SomeProject.csproj]'
+
+  # ─── 4. New: leading whitespace before the file path ─────────────────
+  leading-whitespace:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Emit error with leading spaces
+        run: |
+          echo '    /repo/Some/Folder/SomeFile.cs(10,8): error CS1014: A get or set accessor expected [/repo/Some/Folder/SomeProject.csproj]'
+
+  # ─── 5. New: MSBuild project-number prefix (e.g. "20>") ──────────────
+  msbuild-project-prefix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Emit error with "20>" prefix
+        run: |
+          echo '  20>C:\actions-runner\_work\Some\Folder\SomeFile.cs(8,2): error CS1014: A get or set accessor expected [C:\actions-runner\_work\Some\Folder\SomeProject.csproj]'
+
+  # ─── 6. Warning severity still recognised ────────────────────────────
+  warning-still-works:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Emit a CSC warning
+        run: |
+          echo 'Foo.cs(5,3): warning CS0168: The variable is declared but never used [/repo/proj.csproj]'
+
+  # ─── 7. Negative: MSB-prefixed codes must NOT be matched ─────────────
+  #     (regex has `(?<!MSB)` — should produce NO annotation)
+  msb-code-ignored:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Emit an MSB-coded line (should be ignored by matcher)
+        run: |
+          echo 'Foo.cs(5,3): error MSB4019: The imported project was not found [/repo/proj.csproj]'
+
+  # ─── 8. Negative: malformed line (no severity) — should NOT match ────
+  malformed-ignored:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Emit a non-matching line
+        run: |
+          echo 'Program.cs(10,79): something happened CS1002: ; expected [proj.csproj]'
