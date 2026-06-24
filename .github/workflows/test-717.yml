@@ -12,8 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
-      - uses: actions/setup-dotnet@v5
+      - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      # - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Emit standard CSC error
@@ -26,8 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
-      - uses: actions/setup-dotnet@v5
+      - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      # - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Emit error with line+column
@@ -40,8 +40,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
-      - uses: actions/setup-dotnet@v5
+      - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      # - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Emit dotnet format WHITESPACE error
@@ -54,8 +54,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
-      - uses: actions/setup-dotnet@v5
+      - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      # - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Emit error with leading spaces
@@ -68,8 +68,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
-      - uses: actions/setup-dotnet@v5
+      - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      # - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Emit error with "20>" prefix
@@ -82,8 +82,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
-      - uses: actions/setup-dotnet@v5
+      - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      # - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Emit a CSC warning
@@ -97,8 +97,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
-      - uses: actions/setup-dotnet@v5
+      - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      # - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Emit an MSB-coded line (should be ignored by matcher)
@@ -111,8 +111,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      # - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
-      - uses: actions/setup-dotnet@v5
+      - uses: StephenCleary/setup-dotnet@fix-csc-problem-matcher
+      # - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
       - name: Emit a non-matching line
