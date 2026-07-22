@@ -1,36 +1,35 @@
 name: Reproduce Setup-Dotnet 356
 
 on:
-  # push:
-  #   branches:
-  #     - test-588
+  push:
+    branches:
+      - test-588
   workflow_dispatch:
 
 jobs:
   setup-dotnet:
     strategy:
       matrix:
-        os: [windows-latest, macos-13, ubuntu-22.04, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
       fail-fast: false
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up .NET Core
-        # uses: actions/setup-dotnet@v4
-        uses: akv-platform/setup-dotnet@prefer-installed
+        uses: actions/setup-dotnet@v6
+        # uses: akv-platform/setup-dotnet@prefer-installed
         with:
-          dotnet-version: '9.0.x'
-          prefer-installed: true
+          dotnet-version: '8.0.x'
 
       - name: Verify installation
         run: dotnet --version
 
-      - name: List installed SDKs
-        run: dotnet --list-sdks
+      # - name: List installed SDKs
+      #   run: dotnet --list-sdks
 
-      - name: List installed runtimes
-        run: dotnet --list-runtimes
+      # - name: List installed runtimes
+      #   run: dotnet --list-runtimes
