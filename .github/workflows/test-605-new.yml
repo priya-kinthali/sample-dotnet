@@ -1,0 +1,137 @@
+name: Verify optional-bracket regex + real NuGet audit output
+
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  # ===================================================================
+  # JOB A — Pure regex behavior: does lazy (.*?) capture the full
+  # message when the trailing [project] bracket is ABSENT?
+  # ===================================================================
+  regex-behavior:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test capture with node (no matcher, direct regex eval)
+        run: |
+          node <<'EOF'
+          // The PROPOSED regex (optional bracket)
+          const re = /^([^\s].*)\s+:\s+(error|warning)\s+([a-zA-Z]+\d+):\s*(.*?)(?:\s+\[(.*?)\])?$/;
+          // NOTE: JS has no (?<!MSB) support issues here; we drop it just to test capture,
+          // it does not affect the message/bracket behavior being tested.
+
+          const withBracket =
+            "app.csproj : warning NU1901: Vulnerability found in Newtonsoft.Json 13.0.1 [app.csproj]";
+          const noBracket =
+            "app.csproj : warning NU1701: Package restored using a different framework";
+
+          for (const [label, s] of [["WITH bracket", withBracket], ["NO bracket", noBracket]]) {
+            const m = s.match(re);
+            console.log("=== " + label + " ===");
+            if (!m) { console.log("NO MATCH"); continue; }
+            console.log("file    :", JSON.stringify(m[1]));
+            console.log("severity:", JSON.stringify(m[2]));
+            console.log("code    :", JSON.stringify(m[3]));
+            console.log("message :", JSON.stringify(m[4]));   // <-- the key question
+            console.log("fromPath:", JSON.stringify(m[5]));   // undefined when no bracket
+            console.log("");
+          }
+          EOF
+
+  # ===================================================================
+  # JOB B — Real matcher behavior on the runner (.NET regex engine),
+  # comparing ORIGINAL (mandatory bracket) vs PROPOSED (optional).
+  # ===================================================================
+  matcher-behavior:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create ORIGINAL matcher (mandatory bracket)
+        run: |
+          mkdir -p .github
+          cat > .github/orig.json << 'EOF'
+          {
+            "problemMatcher": [{
+              "owner": "orig",
+              "pattern": [{
+                "regexp": "^([^\\s].*)\\s+:\\s+(error|warning)\\s+([a-zA-Z]+(?<!MSB)\\d+):\\s*(.*?)\\s+\\[(.*?)\\]$",
+                "file": 1, "severity": 2, "code": 3, "message": 4, "fromPath": 5
+              }]
+            }]
+          }
+          EOF
+
+      - name: Create PROPOSED matcher (optional bracket)
+        run: |
+          cat > .github/proposed.json << 'EOF'
+          {
+            "problemMatcher": [{
+              "owner": "proposed",
+              "pattern": [{
+                "regexp": "^([^\\s].*)\\s+:\\s+(error|warning)\\s+([a-zA-Z]+(?<!MSB)\\d+):\\s*(.*?)(?:\\s+\\[(.*?)\\])?$",
+                "file": 1, "severity": 2, "code": 3, "message": 4, "fromPath": 5
+              }]
+            }]
+          }
+          EOF
+
+      - name: Register ORIGINAL only, echo a NO-bracket line
+        run: |
+          echo "::add-matcher::.github/orig.json"
+          echo "ORIG + no-bracket (expect: NO annotation):"
+          echo "app.csproj : warning NU1701: Package restored using a different framework"
+          echo "::remove-matcher owner=orig::"
+
+      - name: Register PROPOSED only, echo a NO-bracket line
+        run: |
+          echo "::add-matcher::.github/proposed.json"
+          echo "PROPOSED + no-bracket (expect: annotation, full message):"
+          echo "app.csproj : warning NU1701: Package restored using a different framework"
+          echo "PROPOSED + with-bracket (expect: annotation, message + fromPath):"
+          echo "app.csproj : warning NU1901: Vulnerability found in Newtonsoft.Json 13.0.1 [app.csproj]"
+          echo "::remove-matcher owner=proposed::"
+
+  # ===================================================================
+  # JOB C — REAL dotnet output: do actual NuGet audit warnings carry
+  # a trailing [project] or not? This settles Claim 1 definitively.
+  # ===================================================================
+  real-dotnet-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Create a project referencing a known-vulnerable package
+        run: |
+          mkdir audit-test && cd audit-test
+          dotnet new console -n AuditTest
+          cd AuditTest
+          # Old System.Text.Json with a known advisory triggers NuGet audit (NU1903/NU1904)
+          dotnet add package System.Text.Json --version 8.0.0
+          # Ensure auditing is on
+          echo '<Project><PropertyGroup><NuGetAudit>true</NuGetAudit><NuGetAuditMode>all</NuGetAuditMode></PropertyGroup></Project>' > Directory.Build.props
+
+      - name: Restore at NORMAL verbosity (observe exact line format)
+        working-directory: audit-test/AuditTest
+        run: dotnet restore -v normal 2>&1 | tee restore-normal.log || true
+
+      - name: Restore at DETAILED verbosity
+        working-directory: audit-test/AuditTest
+        run: dotnet restore -v detailed 2>&1 | tee restore-detailed.log || true
+
+      - name: Show only the NU audit lines and whether they end with a bracket
+        working-directory: audit-test/AuditTest
+        run: |
+          echo "===== NU lines (normal) ====="
+          grep -E "NU19[0-9][0-9]" restore-normal.log || echo "(none found in normal)"
+          echo ""
+          echo "===== NU lines (detailed) ====="
+          grep -E "NU19[0-9][0-9]" restore-detailed.log || echo "(none found in detailed)"
+          echo ""
+          echo "Lines ENDING with ] (has [project] suffix):"
+          grep -E "NU19[0-9][0-9].*\]$" restore-normal.log restore-detailed.log || echo "(none end with ])"
+          echo ""
+          echo "NU lines NOT ending with ] (no [project] suffix):"
+          grep -E "NU19[0-9][0-9]" restore-normal.log restore-detailed.log | grep -vE "\]$" || echo "(all NU lines end with ])"
