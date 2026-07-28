@@ -1,9 +1,9 @@
 name: Verify optional-bracket regex + real NuGet audit output
 
 on:
-  push:
-    branches:
-      - test-588
+  # push:
+  #   branches:
+  #     - test-588
   workflow_dispatch:
 
 jobs:

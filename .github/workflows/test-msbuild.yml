@@ -1,0 +1,60 @@
+name: Verify optional-bracket regex + real NuGet audit output
+
+on:
+  push:
+    branches:
+      - test-588
+  workflow_dispatch:
+
+jobs:
+  regex-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test #6 regex (optional suffix) for message truncation
+        shell: node {0}
+        run: |
+          // The regex from lmvysakh/setup-dotnet#6 (.github/msbuild.json)
+          const regex = /^([^\s].*)\s+:\s+(error|warning)\s+([a-zA-Z]+(?<!MSB)\d+):\s*(.*?)(?:\s+\[(.*?)\])?$/;
+
+          const cases = [
+            {
+              name: "WITH [project] suffix (normal case)",
+              line: "/repo/sample.csproj : warning NU1904: Package 'X' 4.7.0 has a vuln, https://github.com/advisories/GHSA-ghhp-997w-qr28 [/repo/sample.csproj]",
+              expectMessage: "Package 'X' 4.7.0 has a vuln, https://github.com/advisories/GHSA-ghhp-997w-qr28",
+              expectFromPath: "/repo/sample.csproj"
+            },
+            {
+              name: "WITHOUT suffix (the case #6 aims to fix)",
+              line: "/repo/sample.csproj : warning NU1903: Package 'Foo' 1.0.0 has a known high severity vulnerability",
+              expectMessage: "Package 'Foo' 1.0.0 has a known high severity vulnerability",
+              expectFromPath: undefined
+            },
+            {
+              name: "Brackets INSIDE message, NO real suffix (regression risk)",
+              line: "/repo/sample.csproj : warning NU1900: Error reading feed [https://nuget.example] response",
+              expectMessage: "Error reading feed [https://nuget.example] response",
+              expectFromPath: undefined
+            }
+          ];
+
+          let failed = 0;
+          for (const c of cases) {
+            const m = c.line.match(regex);
+            const message  = m ? m[4] : undefined;
+            const fromPath = m ? m[5] : undefined;
+            const ok = message === c.expectMessage && fromPath === c.expectFromPath;
+            console.log(`\n${ok ? "✅ PASS" : "❌ FAIL"} — ${c.name}`);
+            console.log(`   message : ${JSON.stringify(message)}`);
+            console.log(`   fromPath: ${JSON.stringify(fromPath)}`);
+            if (!ok) {
+              failed++;
+              console.log(`   expected message : ${JSON.stringify(c.expectMessage)}`);
+              console.log(`   expected fromPath: ${JSON.stringify(c.expectFromPath)}`);
+            }
+          }
+
+          if (failed > 0) {
+            console.log(`\n${failed} case(s) failed — message truncation / wrong fromPath capture confirmed.`);
+            process.exit(1);
+          }
+          console.log("\nAll cases passed.");
