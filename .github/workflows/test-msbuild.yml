@@ -1,4 +1,4 @@
-name: Verify optional-bracket regex + real NuGet audit output
+name: Test msbuild regex truncation
 
 on:
   push:
@@ -10,29 +10,22 @@ jobs:
   regex-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Test #6 regex (optional suffix) for message truncation
+      - name: Test #6 regex — message ending in brackets
         shell: node {0}
         run: |
-          // The regex from lmvysakh/setup-dotnet#6 (.github/msbuild.json)
           const regex = /^([^\s].*)\s+:\s+(error|warning)\s+([a-zA-Z]+(?<!MSB)\d+):\s*(.*?)(?:\s+\[(.*?)\])?$/;
 
           const cases = [
             {
-              name: "WITH [project] suffix (normal case)",
-              line: "/repo/sample.csproj : warning NU1904: Package 'X' 4.7.0 has a vuln, https://github.com/advisories/GHSA-ghhp-997w-qr28 [/repo/sample.csproj]",
-              expectMessage: "Package 'X' 4.7.0 has a vuln, https://github.com/advisories/GHSA-ghhp-997w-qr28",
-              expectFromPath: "/repo/sample.csproj"
-            },
-            {
-              name: "WITHOUT suffix (the case #6 aims to fix)",
-              line: "/repo/sample.csproj : warning NU1903: Package 'Foo' 1.0.0 has a known high severity vulnerability",
-              expectMessage: "Package 'Foo' 1.0.0 has a known high severity vulnerability",
+              name: "Message ENDS with a bracket token, NO project suffix",
+              line: "/repo/sample.csproj : warning NU1900: See advisory [GHSA-ghhp-997w-qr28]",
+              expectMessage: "See advisory [GHSA-ghhp-997w-qr28]",
               expectFromPath: undefined
             },
             {
-              name: "Brackets INSIDE message, NO real suffix (regression risk)",
-              line: "/repo/sample.csproj : warning NU1900: Error reading feed [https://nuget.example] response",
-              expectMessage: "Error reading feed [https://nuget.example] response",
+              name: "Message ENDS with bracketed URL, NO project suffix",
+              line: "/repo/sample.csproj : warning NU1901: More info [https://nuget.example/advisories]",
+              expectMessage: "More info [https://nuget.example/advisories]",
               expectFromPath: undefined
             }
           ];
@@ -53,8 +46,5 @@ jobs:
             }
           }
 
-          if (failed > 0) {
-            console.log(`\n${failed} case(s) failed — message truncation / wrong fromPath capture confirmed.`);
-            process.exit(1);
-          }
+          if (failed > 0) { console.log(`\n${failed} case(s) failed.`); process.exit(1); }
           console.log("\nAll cases passed.");
